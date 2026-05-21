@@ -4,7 +4,6 @@
 // Originally published at http://damieng.com/blog/2007/11/19/calculating-crc-64-in-c-and-net
 
 using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
 
 namespace DamienG.Security.Cryptography
@@ -57,7 +56,7 @@ namespace DamienG.Security.Cryptography
 
         public override int HashSize => 64;
 
-        protected static UInt64 CalculateHash(UInt64 seed, UInt64[] table, IList<byte> buffer, int start, int size)
+        protected static UInt64 CalculateHash(UInt64 seed, UInt64[] table, byte[] buffer, int start, int size)
         {
             var hash = seed;
             for (var i = start; i < start + size; i++)

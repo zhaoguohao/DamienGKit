@@ -3,7 +3,6 @@
 // You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 
 using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
 
 namespace DamienG.Security.Cryptography
@@ -147,12 +146,12 @@ namespace DamienG.Security.Cryptography
         /// </summary>
         /// <param name="table">The polynomial-derived table such as from <see cref="InitializeTable(UInt32)"/>.</param>
         /// <param name="seed">The initial seed to start from.</param>
-        /// <param name="buffer">The <see cref="IList{byte}"/> buffer to calculate the CRC32 from.</param>
+        /// <param name="buffer">The byte array to calculate the CRC32 from.</param>
         /// <param name="start">What position within the <paramref name="buffer"/> to start calculating from.</param>
         /// <param name="size">How many bytes within the <paramref name="buffer"/> to read in calculating the CRC32.</param>
         /// <returns>The bit-inverted CRC32.</returns>
         /// <remarks>This hash is bit-inverted. Use other methods in this class or <see langword="~"/> the result from this method.</remarks>
-        private static UInt32 CalculateHash(UInt32[] table, UInt32 seed, IList<byte> buffer, int start, int size)
+        private static UInt32 CalculateHash(UInt32[] table, UInt32 seed, byte[] buffer, int start, int size)
         {
             var hash = seed;
             for (var i = start; i < start + size; i++)

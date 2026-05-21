@@ -4,7 +4,6 @@
 // Originally published at http://damieng.com/blog/2007/11/24/calculating-elf-32-in-c-and-net
 
 using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
 
 namespace DamienG.Security.Cryptography
@@ -53,7 +52,7 @@ namespace DamienG.Security.Cryptography
             return CalculateHash(seed, buffer, 0, buffer.Length);
         }
 
-        private static UInt32 CalculateHash(UInt32 seed, IList<byte> buffer, int start, int size)
+        private static UInt32 CalculateHash(UInt32 seed, byte[] buffer, int start, int size)
         {
             var hash = seed;
             for (var i = start; i < start + size; i++)
