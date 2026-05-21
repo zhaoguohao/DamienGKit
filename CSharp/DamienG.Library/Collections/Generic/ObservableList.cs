@@ -11,17 +11,17 @@ namespace DamienG.Collections.Generic
 {
     public class ObservableList<T> : IList<T>
     {
-        readonly object _lock = new object();
-        readonly IList<T> internalList;
+        private readonly object _lock = new object();
+        private readonly IList<T> _internalList;
 
         public ObservableList()
         {
-            internalList = new List<T>();
+            _internalList = new List<T>();
         }
 
         public ObservableList(IList<T> list)
         {
-            internalList = list ?? throw new ArgumentNullException(nameof(list));
+            _internalList = list ?? throw new ArgumentNullException(nameof(list));
         }
 
         public ObservableList(IEnumerable<T> collection)
@@ -29,77 +29,71 @@ namespace DamienG.Collections.Generic
             if (collection == null)
                 throw new ArgumentNullException(nameof(collection));
 
-            internalList = new List<T>(collection);
+            _internalList = new List<T>(collection);
         }
 
         public int IndexOf(T item)
         {
-            return internalList.IndexOf(item);
+            return _internalList.IndexOf(item);
         }
 
         public void Insert(int index, T item)
         {
-            internalList.Insert(index, item);
+            _internalList.Insert(index, item);
             OnListChanged(new ListChangedEventArgs(index, item));
         }
 
         public void RemoveAt(int index)
         {
-            var item = internalList[index];
-            internalList.RemoveAt(index);
+            var item = _internalList[index];
+            _internalList.RemoveAt(index);
             OnListChanged(new ListChangedEventArgs(index, item));
         }
 
         public T this[int index]
         {
-            get { return internalList[index]; }
+            get => _internalList[index];
             set
             {
-                if (internalList[index].Equals(value)) return;
+                if (_internalList[index].Equals(value)) return;
 
-                internalList[index] = value;
+                _internalList[index] = value;
                 OnListChanged(new ListChangedEventArgs(index, value));
             }
         }
 
         public void Add(T item)
         {
-            internalList.Add(item);
-            OnListChanged(new ListChangedEventArgs(internalList.IndexOf(item), item));
+            _internalList.Add(item);
+            OnListChanged(new ListChangedEventArgs(_internalList.IndexOf(item), item));
         }
 
         public void Clear()
         {
-            internalList.Clear();
-            OnListCleared(new EventArgs());
+            _internalList.Clear();
+            OnListCleared(EventArgs.Empty);
         }
 
         public bool Contains(T item)
         {
-            return internalList.Contains(item);
+            return _internalList.Contains(item);
         }
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            internalList.CopyTo(array, arrayIndex);
+            _internalList.CopyTo(array, arrayIndex);
         }
 
-        public int Count
-        {
-            get { return internalList.Count; }
-        }
+        public int Count => _internalList.Count;
 
-        public bool IsReadOnly
-        {
-            get { return internalList.IsReadOnly; }
-        }
+        public bool IsReadOnly => _internalList.IsReadOnly;
 
         public bool Remove(T item)
         {
             lock (_lock)
             {
-                var index = internalList.IndexOf(item);
-                if (internalList.Remove(item))
+                var index = _internalList.IndexOf(item);
+                if (_internalList.Remove(item))
                 {
                     OnListChanged(new ListChangedEventArgs(index, item));
                     return true;
@@ -110,12 +104,12 @@ namespace DamienG.Collections.Generic
 
         public IEnumerator<T> GetEnumerator()
         {
-            return internalList.GetEnumerator();
+            return _internalList.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable)internalList).GetEnumerator();
+            return ((IEnumerable)_internalList).GetEnumerator();
         }
 
         public event EventHandler<ListChangedEventArgs> ListChanged = delegate { };

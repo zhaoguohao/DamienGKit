@@ -60,9 +60,9 @@ namespace DamienG.System
 
         public override bool Equals(object obj)
         {
-            if (!(obj is AutoOperators))
+            if (!(obj is AutoOperators operators))
                 return false;
-            return this == (AutoOperators) obj;
+            return this == operators;
         }
     }
 }

@@ -23,14 +23,14 @@ namespace DamienG.System
         /// A task that returns the first element in <paramref name="source"/>.
         /// </returns>
         /// <param name="source">The <see cref="T:System.Linq.IQueryable`1"/> to return the first element of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">The source sequence is empty.</exception>
+        /// <exception cref="T:InvalidOperationException">The source sequence is empty.</exception>
         public static Task<TSource> FirstAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
-            return Task.Run(() => source.First(), cancellationToken);
+            return Task.Run(source.First, cancellationToken);
         }
 
         /// <summary>
@@ -41,11 +41,11 @@ namespace DamienG.System
         /// </returns>
         /// <param name="source">An <see cref="T:System.Linq.IQueryable`1"/> to return an element from.</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">No element satisfies the condition in <paramref name="predicate"/>.-or-The source sequence is empty.</exception>
+        /// <exception cref="T:InvalidOperationException">No element satisfies the condition in <paramref name="predicate"/>.-or-The source sequence is empty.</exception>
         public static Task<TSource> FirstAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, bool>> predicate, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.First(predicate), cancellationToken);
@@ -58,9 +58,9 @@ namespace DamienG.System
         /// A task that returns default(<typeparamref name="TSource"/>) if <paramref name="source"/> is empty; otherwise, the first element in <paramref name="source"/>.
         /// </returns>
         /// <param name="source">The <see cref="T:System.Linq.IQueryable`1"/> to return the first element of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
         public static Task<TSource> FirstOrDefaultAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
@@ -75,9 +75,9 @@ namespace DamienG.System
         /// </returns>
         /// <param name="source">An <see cref="T:System.Linq.IQueryable`1"/> to return an element from.</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         public static Task<TSource> FirstOrDefaultAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, bool>> predicate, CancellationToken cancellationToken = default)
         {
@@ -91,11 +91,11 @@ namespace DamienG.System
         /// A task that returns the value at the last position in <paramref name="source"/>.
         /// </returns>
         /// <param name="source">An <see cref="T:System.Linq.IQueryable`1"/> to return the last element of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">The source sequence is empty.</exception>
+        /// <exception cref="T:InvalidOperationException">The source sequence is empty.</exception>
         public static Task<TSource> LastAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.Last(), cancellationToken);
@@ -109,11 +109,11 @@ namespace DamienG.System
         /// </returns>
         /// <param name="source">An <see cref="T:System.Linq.IQueryable`1"/> to return an element from.</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">No element satisfies the condition in <paramref name="predicate"/>.-or-The source sequence is empty.</exception>
+        /// <exception cref="T:InvalidOperationException">No element satisfies the condition in <paramref name="predicate"/>.-or-The source sequence is empty.</exception>
         public static Task<TSource> LastAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, bool>> predicate, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.Last(predicate), cancellationToken);
@@ -126,9 +126,9 @@ namespace DamienG.System
         /// A task that returns default(<typeparamref name="TSource"/>) if <paramref name="source"/> is empty; otherwise, the last element in <paramref name="source"/>.
         /// </returns>
         /// <param name="source">An <see cref="T:System.Linq.IQueryable`1"/> to return the last element of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
         public static Task<TSource> LastOrDefaultAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
@@ -143,9 +143,9 @@ namespace DamienG.System
         /// </returns>
         /// <param name="source">An <see cref="T:System.Linq.IQueryable`1"/> to return an element from.</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         public static Task<TSource> LastOrDefaultAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, bool>> predicate, CancellationToken cancellationToken = default)
         {
@@ -159,11 +159,11 @@ namespace DamienG.System
         /// A task that returns the single element of the input sequence.
         /// </returns>
         /// <param name="source">An <see cref="T:System.Linq.IQueryable`1"/> to return the single element of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">
+        /// <exception cref="T:InvalidOperationException">
         /// <paramref name="source"/> has more than one element.</exception>
         public static Task<TSource> SingleAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
@@ -178,11 +178,11 @@ namespace DamienG.System
         /// </returns>
         /// <param name="source">An <see cref="T:System.Linq.IQueryable`1"/> to return a single element from.</param>
         /// <param name="predicate">A function to test an element for a condition.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">No element satisfies the condition in <paramref name="predicate"/>.-or-More than one element satisfies the condition in <paramref name="predicate"/>.-or-The source sequence is empty.</exception>
+        /// <exception cref="T:InvalidOperationException">No element satisfies the condition in <paramref name="predicate"/>.-or-More than one element satisfies the condition in <paramref name="predicate"/>.-or-The source sequence is empty.</exception>
         public static Task<TSource> SingleAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, bool>> predicate, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.Single(predicate), cancellationToken);
@@ -195,11 +195,11 @@ namespace DamienG.System
         /// A task that returns the single element of the input sequence, or default(<typeparamref name="TSource"/>) if the sequence contains no elements.
         /// </returns>
         /// <param name="source">An <see cref="T:System.Linq.IQueryable`1"/> to return the single element of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">
+        /// <exception cref="T:InvalidOperationException">
         /// <paramref name="source"/> has more than one element.</exception>
         public static Task<TSource> SingleOrDefaultAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
@@ -214,11 +214,11 @@ namespace DamienG.System
         /// </returns>
         /// <param name="source">An <see cref="T:System.Linq.IQueryable`1"/> to return a single element from.</param>
         /// <param name="predicate">A function to test an element for a condition.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">More than one element satisfies the condition in <paramref name="predicate"/>.</exception>
+        /// <exception cref="T:InvalidOperationException">More than one element satisfies the condition in <paramref name="predicate"/>.</exception>
         public static Task<TSource> SingleOrDefaultAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, bool>> predicate, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.SingleOrDefault(predicate), cancellationToken);
@@ -232,11 +232,11 @@ namespace DamienG.System
         /// </returns>
         /// <param name="source">An <see cref="T:System.Linq.IQueryable`1"/> to return an element from.</param>
         /// <param name="index">The zero-based index of the element to retrieve.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="T:ArgumentOutOfRangeException">
         /// <paramref name="index"/> is less than zero.</exception>
         public static Task<TSource> ElementAtAsync<TSource>(this IQueryable<TSource> source, int index, CancellationToken cancellationToken = default)
         {
@@ -251,9 +251,9 @@ namespace DamienG.System
         /// </returns>
         /// <param name="source">An <see cref="T:System.Linq.IQueryable`1"/> to return an element from.</param>
         /// <param name="index">The zero-based index of the element to retrieve.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
         public static Task<TSource> ElementAtOrDefaultAsync<TSource>(this IQueryable<TSource> source, int index, CancellationToken cancellationToken = default)
         {
@@ -268,9 +268,9 @@ namespace DamienG.System
         /// </returns>
         /// <param name="source">An <see cref="T:System.Linq.IQueryable`1"/> in which to locate <paramref name="item"/>.</param>
         /// <param name="item">The object to locate in the sequence.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
         public static Task<bool> ContainsAsync<TSource>(this IQueryable<TSource> source, TSource item, CancellationToken cancellationToken = default)
         {
@@ -286,9 +286,9 @@ namespace DamienG.System
         /// <param name="source">An <see cref="T:System.Linq.IQueryable`1"/> in which to locate <paramref name="item"/>.</param>
         /// <param name="item">The object to locate in the sequence.</param>
         /// <param name="comparer">An <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> to compare values.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
         public static Task<bool> ContainsAsync<TSource>(this IQueryable<TSource> source, TSource item, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken = default)
         {
@@ -303,9 +303,9 @@ namespace DamienG.System
         /// </returns>
         /// <param name="source1">An <see cref="T:System.Linq.IQueryable`1"/> whose elements to compare to those of <paramref name="source2"/>.</param>
         /// <param name="source2">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> whose elements to compare to those of the first sequence.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of the input sequences.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source1"/> or <paramref name="source2"/> is null.</exception>
         public static Task<bool> SequenceEqualAsync<TSource>(this IQueryable<TSource> source1, IEnumerable<TSource> source2, CancellationToken cancellationToken = default)
         {
@@ -321,9 +321,9 @@ namespace DamienG.System
         /// <param name="source1">An <see cref="T:System.Linq.IQueryable`1"/> whose elements to compare to those of <paramref name="source2"/>.</param>
         /// <param name="source2">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> whose elements to compare to those of the first sequence.</param>
         /// <param name="comparer">An <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> to use to compare elements.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of the input sequences.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source1"/> or <paramref name="source2"/> is null.</exception>
         public static Task<bool> SequenceEqualAsync<TSource>(this IQueryable<TSource> source1, IEnumerable<TSource> source2, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken = default)
         {
@@ -337,9 +337,9 @@ namespace DamienG.System
         /// A task that returns true if the source sequence contains any elements; otherwise, false.
         /// </returns>
         /// <param name="source">A sequence to check for being empty.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
         public static Task<bool> AnyAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
@@ -354,9 +354,9 @@ namespace DamienG.System
         /// </returns>
         /// <param name="source">A sequence whose elements to test for a condition.</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         public static Task<bool> AnyAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, bool>> predicate, CancellationToken cancellationToken = default)
         {
@@ -371,9 +371,9 @@ namespace DamienG.System
         /// </returns>
         /// <param name="source">A sequence whose elements to test for a condition.</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         public static Task<bool> AllAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, bool>> predicate, CancellationToken cancellationToken = default)
         {
@@ -387,11 +387,11 @@ namespace DamienG.System
         /// A task that returns the number of elements in the input sequence.
         /// </returns>
         /// <param name="source">The <see cref="T:System.Linq.IQueryable`1"/> that contains the elements to be counted.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
-        /// <exception cref="T:System.OverflowException">The number of elements in <paramref name="source"/> is larger than <see cref="F:System.Int32.MaxValue"/>.</exception>
+        /// <exception cref="T:OverflowException">The number of elements in <paramref name="source"/> is larger than <see cref="F:int.MaxValue"/>.</exception>
         public static Task<int> CountAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.Count(), cancellationToken);
@@ -405,46 +405,46 @@ namespace DamienG.System
         /// </returns>
         /// <param name="source">An <see cref="T:System.Linq.IQueryable`1"/> that contains the elements to be counted.</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
-        /// <exception cref="T:System.OverflowException">The number of elements in <paramref name="source"/> is larger than <see cref="F:System.Int32.MaxValue"/>.</exception>
+        /// <exception cref="T:OverflowException">The number of elements in <paramref name="source"/> is larger than <see cref="F:int.MaxValue"/>.</exception>
         public static Task<int> CountAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, bool>> predicate, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.Count(predicate), cancellationToken);
         }
 
         /// <summary>
-        /// Asynchronously returns an <see cref="T:System.Int64"/> that represents the total number of elements in a sequence.
+        /// Asynchronously returns an <see cref="T:long"/> that represents the total number of elements in a sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the number of elements in <paramref name="source"/>.
         /// </returns>
         /// <param name="source">An <see cref="T:System.Linq.IQueryable`1"/> that contains the elements to be counted.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
-        /// <exception cref="T:System.OverflowException">The number of elements exceeds <see cref="F:System.Int64.MaxValue"/>.</exception>
+        /// <exception cref="T:OverflowException">The number of elements exceeds <see cref="F:long.MaxValue"/>.</exception>
         public static Task<long> LongCountAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.LongCount(), cancellationToken);
         }
 
         /// <summary>
-        /// Asynchronously returns an <see cref="T:System.Int64"/> that represents the number of elements in a sequence that satisfy a condition.
+        /// Asynchronously returns an <see cref="T:long"/> that represents the number of elements in a sequence that satisfy a condition.
         /// </summary>
         /// <returns>
         /// A task that returns the number of elements in <paramref name="source"/> that satisfy the condition in the predicate function.
         /// </returns>
         /// <param name="source">An <see cref="T:System.Linq.IQueryable`1"/> that contains the elements to be counted.</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
-        /// <exception cref="T:System.OverflowException">The number of matching elements exceeds <see cref="F:System.Int64.MaxValue"/>.</exception>
+        /// <exception cref="T:OverflowException">The number of matching elements exceeds <see cref="F:long.MaxValue"/>.</exception>
         public static Task<long> LongCountAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, bool>> predicate, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.LongCount(predicate), cancellationToken);
@@ -457,9 +457,9 @@ namespace DamienG.System
         /// A task that returns the minimum value in the sequence.
         /// </returns>
         /// <param name="source">A sequence of values to determine the minimum of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
         public static Task<TSource> MinAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
@@ -474,10 +474,10 @@ namespace DamienG.System
         /// </returns>
         /// <param name="source">A sequence of values to determine the minimum of.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <typeparam name="TResult">The type of the value returned by the function represented by <paramref name="selector"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static Task<TResult> MinAsync<TSource, TResult>(this IQueryable<TSource> source, Expression<Func<TSource, TResult>> selector, CancellationToken cancellationToken = default)
         {
@@ -491,9 +491,9 @@ namespace DamienG.System
         /// A task that returns the maximum value in the sequence.
         /// </returns>
         /// <param name="source">A sequence of values to determine the maximum of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
         public static Task<TSource> MaxAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
@@ -508,10 +508,10 @@ namespace DamienG.System
         /// </returns>
         /// <param name="source">A sequence of values to determine the maximum of.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <typeparam name="TResult">The type of the value returned by the function represented by <paramref name="selector"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static Task<TResult> MaxAsync<TSource, TResult>(this IQueryable<TSource> source, Expression<Func<TSource, TResult>> selector, CancellationToken cancellationToken = default)
         {
@@ -519,78 +519,78 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the sum of a sequence of <see cref="T:System.Int32"/> values.
+        /// Asynchronously computes the sum of a sequence of <see cref="T:int"/> values.
         /// </summary>
         /// <returns>
         /// A task that returns the sum of the values in the sequence.
         /// </returns>
-        /// <param name="source">A sequence of <see cref="T:System.Int32"/> values to calculate the sum of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <param name="source">A sequence of <see cref="T:int"/> values to calculate the sum of.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
-        /// <exception cref="T:System.OverflowException">The sum is larger than <see cref="F:System.Int32.MaxValue"/>.</exception>
+        /// <exception cref="T:OverflowException">The sum is larger than <see cref="F:int.MaxValue"/>.</exception>
         public static Task<int> SumAsync(this IQueryable<int> source, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.Sum(), cancellationToken);
         }
 
         /// <summary>
-        /// Asynchronously computes the sum of a sequence of nullable <see cref="T:System.Int32"/> values.
+        /// Asynchronously computes the sum of a sequence of nullable <see cref="T:int"/> values.
         /// </summary>
         /// <returns>
         /// A task that returns the sum of the values in the sequence.
         /// </returns>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Int32"/> values to calculate the sum of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <param name="source">A sequence of nullable <see cref="T:int"/> values to calculate the sum of.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
-        /// <exception cref="T:System.OverflowException">The sum is larger than <see cref="F:System.Int32.MaxValue"/>.</exception>
+        /// <exception cref="T:OverflowException">The sum is larger than <see cref="F:int.MaxValue"/>.</exception>
         public static Task<int?> SumAsync(this IQueryable<int?> source, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.Sum(), cancellationToken);
         }
 
         /// <summary>
-        /// Asynchronously computes the sum of a sequence of <see cref="T:System.Int64"/> values.
+        /// Asynchronously computes the sum of a sequence of <see cref="T:long"/> values.
         /// </summary>
         /// <returns>
         /// A task that returns the sum of the values in the sequence.
         /// </returns>
-        /// <param name="source">A sequence of <see cref="T:System.Int64"/> values to calculate the sum of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <param name="source">A sequence of <see cref="T:long"/> values to calculate the sum of.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
-        /// <exception cref="T:System.OverflowException">The sum is larger than <see cref="F:System.Int64.MaxValue"/>.</exception>
+        /// <exception cref="T:OverflowException">The sum is larger than <see cref="F:long.MaxValue"/>.</exception>
         public static Task<long> SumAsync(this IQueryable<long> source, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.Sum(), cancellationToken);
         }
 
         /// <summary>
-        /// Asynchronously computes the sum of a sequence of nullable <see cref="T:System.Int64"/> values.
+        /// Asynchronously computes the sum of a sequence of nullable <see cref="T:long"/> values.
         /// </summary>
         /// <returns>
         /// A task that returns the sum of the values in the sequence.
         /// </returns>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Int64"/> values to calculate the sum of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <param name="source">A sequence of nullable <see cref="T:long"/> values to calculate the sum of.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
-        /// <exception cref="T:System.OverflowException">The sum is larger than <see cref="F:System.Int64.MaxValue"/>.</exception>
+        /// <exception cref="T:OverflowException">The sum is larger than <see cref="F:long.MaxValue"/>.</exception>
         public static Task<long?> SumAsync(this IQueryable<long?> source, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.Sum(), cancellationToken);
         }
 
         /// <summary>
-        /// Asynchronously computes the sum of a sequence of <see cref="T:System.Single"/> values.
+        /// Asynchronously computes the sum of a sequence of <see cref="T:float"/> values.
         /// </summary>
         /// <returns>
         /// A task that returns the sum of the values in the sequence.
         /// </returns>
-        /// <param name="source">A sequence of <see cref="T:System.Single"/> values to calculate the sum of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <param name="source">A sequence of <see cref="T:float"/> values to calculate the sum of.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
         public static Task<float> SumAsync(this IQueryable<float> source, CancellationToken cancellationToken = default)
         {
@@ -598,14 +598,14 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the sum of a sequence of nullable <see cref="T:System.Single"/> values.
+        /// Asynchronously computes the sum of a sequence of nullable <see cref="T:float"/> values.
         /// </summary>
         /// <returns>
         /// A task that returns the sum of the values in the sequence.
         /// </returns>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Single"/> values to calculate the sum of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <param name="source">A sequence of nullable <see cref="T:float"/> values to calculate the sum of.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
         public static Task<float?> SumAsync(this IQueryable<float?> source, CancellationToken cancellationToken = default)
         {
@@ -613,14 +613,14 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the sum of a sequence of <see cref="T:System.Double"/> values.
+        /// Asynchronously computes the sum of a sequence of <see cref="T:double"/> values.
         /// </summary>
         /// <returns>
         /// A task that returns the sum of the values in the sequence.
         /// </returns>
-        /// <param name="source">A sequence of <see cref="T:System.Double"/> values to calculate the sum of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <param name="source">A sequence of <see cref="T:double"/> values to calculate the sum of.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
         public static Task<double> SumAsync(this IQueryable<double> source, CancellationToken cancellationToken = default)
         {
@@ -628,14 +628,14 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the sum of a sequence of nullable <see cref="T:System.Double"/> values.
+        /// Asynchronously computes the sum of a sequence of nullable <see cref="T:double"/> values.
         /// </summary>
         /// <returns>
         /// A task that returns the sum of the values in the sequence.
         /// </returns>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Double"/> values to calculate the sum of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <param name="source">A sequence of nullable <see cref="T:double"/> values to calculate the sum of.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
         public static Task<double?> SumAsync(this IQueryable<double?> source, CancellationToken cancellationToken = default)
         {
@@ -643,120 +643,120 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the sum of a sequence of <see cref="T:System.Decimal"/> values.
+        /// Asynchronously computes the sum of a sequence of <see cref="T:decimal"/> values.
         /// </summary>
         /// <returns>
         /// A task that returns the sum of the values in the sequence.
         /// </returns>
-        /// <param name="source">A sequence of <see cref="T:System.Decimal"/> values to calculate the sum of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <param name="source">A sequence of <see cref="T:decimal"/> values to calculate the sum of.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
-        /// <exception cref="T:System.OverflowException">The sum is larger than <see cref="F:System.Decimal.MaxValue"/>.</exception>
+        /// <exception cref="T:OverflowException">The sum is larger than <see cref="F:decimal.MaxValue"/>.</exception>
         public static Task<decimal> SumAsync(this IQueryable<decimal> source, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.Sum(), cancellationToken);
         }
 
         /// <summary>
-        /// Asynchronously computes the sum of a sequence of nullable <see cref="T:System.Decimal"/> values.
+        /// Asynchronously computes the sum of a sequence of nullable <see cref="T:decimal"/> values.
         /// </summary>
         /// <returns>
         /// A task that returns the sum of the values in the sequence.
         /// </returns>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Decimal"/> values to calculate the sum of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <param name="source">A sequence of nullable <see cref="T:decimal"/> values to calculate the sum of.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
-        /// <exception cref="T:System.OverflowException">The sum is larger than <see cref="F:System.Decimal.MaxValue"/>.</exception>
+        /// <exception cref="T:OverflowException">The sum is larger than <see cref="F:decimal.MaxValue"/>.</exception>
         public static Task<decimal?> SumAsync(this IQueryable<decimal?> source, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.Sum(), cancellationToken);
         }
 
         /// <summary>
-        /// Asynchronously computes the sum of the sequence of <see cref="T:System.Int32"/> values that is obtained by invoking a projection function on each element of the input sequence.
+        /// Asynchronously computes the sum of the sequence of <see cref="T:int"/> values that is obtained by invoking a projection function on each element of the input sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the sum of the projected values.
         /// </returns>
         /// <param name="source">A sequence of values of type <typeparamref name="TSource"/>.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <exception cref="T:System.OverflowException">The sum is larger than <see cref="F:System.Int32.MaxValue"/>.</exception>
+        /// <exception cref="T:OverflowException">The sum is larger than <see cref="F:int.MaxValue"/>.</exception>
         public static Task<int> SumAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, int>> selector, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.Sum(selector), cancellationToken);
         }
 
         /// <summary>
-        /// Asynchronously computes the sum of the sequence of nullable <see cref="T:System.Int32"/> values that is obtained by invoking a projection function on each element of the input sequence.
+        /// Asynchronously computes the sum of the sequence of nullable <see cref="T:int"/> values that is obtained by invoking a projection function on each element of the input sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the sum of the projected values.
         /// </returns>
         /// <param name="source">A sequence of values of type <typeparamref name="TSource"/>.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <exception cref="T:System.OverflowException">The sum is larger than <see cref="F:System.Int32.MaxValue"/>.</exception>
+        /// <exception cref="T:OverflowException">The sum is larger than <see cref="F:int.MaxValue"/>.</exception>
         public static Task<int?> SumAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, int?>> selector, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.Sum(selector), cancellationToken);
         }
 
         /// <summary>
-        /// Asynchronously computes the sum of the sequence of <see cref="T:System.Int64"/> values that is obtained by invoking a projection function on each element of the input sequence.
+        /// Asynchronously computes the sum of the sequence of <see cref="T:long"/> values that is obtained by invoking a projection function on each element of the input sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the sum of the projected values.
         /// </returns>
         /// <param name="source">A sequence of values of type <typeparamref name="TSource"/>.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <exception cref="T:System.OverflowException">The sum is larger than <see cref="F:System.Int64.MaxValue"/>.</exception>
+        /// <exception cref="T:OverflowException">The sum is larger than <see cref="F:long.MaxValue"/>.</exception>
         public static Task<long> SumAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, long>> selector, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.Sum(selector), cancellationToken);
         }
 
         /// <summary>
-        /// Asynchronously computes the sum of the sequence of nullable <see cref="T:System.Int64"/> values that is obtained by invoking a projection function on each element of the input sequence.
+        /// Asynchronously computes the sum of the sequence of nullable <see cref="T:long"/> values that is obtained by invoking a projection function on each element of the input sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the sum of the projected values.
         /// </returns>
         /// <param name="source">A sequence of values of type <typeparamref name="TSource"/>.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <exception cref="T:System.OverflowException">The sum is larger than <see cref="F:System.Int64.MaxValue"/>.</exception>
+        /// <exception cref="T:OverflowException">The sum is larger than <see cref="F:long.MaxValue"/>.</exception>
         public static Task<long?> SumAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, long?>> selector, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.Sum(selector), cancellationToken);
         }
 
         /// <summary>
-        /// Asynchronously computes the sum of the sequence of <see cref="T:System.Single"/> values that is obtained by invoking a projection function on each element of the input sequence.
+        /// Asynchronously computes the sum of the sequence of <see cref="T:float"/> values that is obtained by invoking a projection function on each element of the input sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the sum of the projected values.
         /// </returns>
         /// <param name="source">A sequence of values of type <typeparamref name="TSource"/>.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static Task<float> SumAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, float>> selector, CancellationToken cancellationToken = default)
         {
@@ -764,16 +764,16 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the sum of the sequence of nullable <see cref="T:System.Single"/> values that is obtained by invoking a projection function on each element of the input sequence.
+        /// Asynchronously computes the sum of the sequence of nullable <see cref="T:float"/> values that is obtained by invoking a projection function on each element of the input sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the sum of the projected values.
         /// </returns>
         /// <param name="source">A sequence of values of type <typeparamref name="TSource"/>.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static Task<float?> SumAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, float?>> selector, CancellationToken cancellationToken = default)
         {
@@ -781,16 +781,16 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the sum of the sequence of <see cref="T:System.Double"/> values that is obtained by invoking a projection function on each element of the input sequence.
+        /// Asynchronously computes the sum of the sequence of <see cref="T:double"/> values that is obtained by invoking a projection function on each element of the input sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the sum of the projected values.
         /// </returns>
         /// <param name="source">A sequence of values of type <typeparamref name="TSource"/>.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static Task<double> SumAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, double>> selector, CancellationToken cancellationToken = default)
         {
@@ -798,16 +798,16 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the sum of the sequence of nullable <see cref="T:System.Double"/> values that is obtained by invoking a projection function on each element of the input sequence.
+        /// Asynchronously computes the sum of the sequence of nullable <see cref="T:double"/> values that is obtained by invoking a projection function on each element of the input sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the sum of the projected values.
         /// </returns>
         /// <param name="source">A sequence of values of type <typeparamref name="TSource"/>.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static Task<double?> SumAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, double?>> selector, CancellationToken cancellationToken = default)
         {
@@ -815,52 +815,52 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the sum of the sequence of <see cref="T:System.Decimal"/> values that is obtained by invoking a projection function on each element of the input sequence.
+        /// Asynchronously computes the sum of the sequence of <see cref="T:decimal"/> values that is obtained by invoking a projection function on each element of the input sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the sum of the projected values.
         /// </returns>
         /// <param name="source">A sequence of values of type <typeparamref name="TSource"/>.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <exception cref="T:System.OverflowException">The sum is larger than <see cref="F:System.Decimal.MaxValue"/>.</exception>
+        /// <exception cref="T:OverflowException">The sum is larger than <see cref="F:decimal.MaxValue"/>.</exception>
         public static Task<decimal> SumAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, decimal>> selector, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.Sum(selector), cancellationToken);
         }
 
         /// <summary>
-        /// Asynchronously computes the sum of the sequence of nullable <see cref="T:System.Decimal"/> values that is obtained by invoking a projection function on each element of the input sequence.
+        /// Asynchronously computes the sum of the sequence of nullable <see cref="T:decimal"/> values that is obtained by invoking a projection function on each element of the input sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the sum of the projected values.
         /// </returns>
         /// <param name="source">A sequence of values of type <typeparamref name="TSource"/>.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <exception cref="T:System.OverflowException">The sum is larger than <see cref="F:System.Decimal.MaxValue"/>.</exception>
+        /// <exception cref="T:OverflowException">The sum is larger than <see cref="F:decimal.MaxValue"/>.</exception>
         public static Task<decimal?> SumAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, decimal?>> selector, CancellationToken cancellationToken = default)
         {
             return Task.Run(() => source.Sum(selector), cancellationToken);
         }
 
         /// <summary>
-        /// Asynchronously computes the average of a sequence of <see cref="T:System.Int32"/> values.
+        /// Asynchronously computes the average of a sequence of <see cref="T:int"/> values.
         /// </summary>
         /// <returns>
         /// A task that returns the average of the sequence of values.
         /// </returns>
-        /// <param name="source">A sequence of <see cref="T:System.Int32"/> values to calculate the average of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <param name="source">A sequence of <see cref="T:int"/> values to calculate the average of.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">
+        /// <exception cref="T:InvalidOperationException">
         /// <paramref name="source"/> contains no elements.</exception>
         public static Task<double> AverageAsync(this IQueryable<int> source, CancellationToken cancellationToken = default)
         {
@@ -868,14 +868,14 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the average of a sequence of nullable <see cref="T:System.Int32"/> values.
+        /// Asynchronously computes the average of a sequence of nullable <see cref="T:int"/> values.
         /// </summary>
         /// <returns>
         /// A task that returns the average of the sequence of values, or null if the source sequence is empty or contains only null values.
         /// </returns>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Int32"/> values to calculate the average of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <param name="source">A sequence of nullable <see cref="T:int"/> values to calculate the average of.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
         public static Task<double?> AverageAsync(this IQueryable<int?> source, CancellationToken cancellationToken = default)
         {
@@ -883,16 +883,16 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the average of a sequence of <see cref="T:System.Int64"/> values.
+        /// Asynchronously computes the average of a sequence of <see cref="T:long"/> values.
         /// </summary>
         /// <returns>
         /// A task that returns the average of the sequence of values.
         /// </returns>
-        /// <param name="source">A sequence of <see cref="T:System.Int64"/> values to calculate the average of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <param name="source">A sequence of <see cref="T:long"/> values to calculate the average of.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">
+        /// <exception cref="T:InvalidOperationException">
         /// <paramref name="source"/> contains no elements.</exception>
         public static Task<double> AverageAsync(this IQueryable<long> source, CancellationToken cancellationToken = default)
         {
@@ -900,14 +900,14 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the average of a sequence of nullable <see cref="T:System.Int64"/> values.
+        /// Asynchronously computes the average of a sequence of nullable <see cref="T:long"/> values.
         /// </summary>
         /// <returns>
         /// A task that returns the average of the sequence of values, or null if the source sequence is empty or contains only null values.
         /// </returns>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Int64"/> values to calculate the average of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <param name="source">A sequence of nullable <see cref="T:long"/> values to calculate the average of.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
         public static Task<double?> AverageAsync(this IQueryable<long?> source, CancellationToken cancellationToken = default)
         {
@@ -915,16 +915,16 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the average of a sequence of <see cref="T:System.Single"/> values.
+        /// Asynchronously computes the average of a sequence of <see cref="T:float"/> values.
         /// </summary>
         /// <returns>
         /// A task that returns the average of the sequence of values.
         /// </returns>
-        /// <param name="source">A sequence of <see cref="T:System.Single"/> values to calculate the average of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <param name="source">A sequence of <see cref="T:float"/> values to calculate the average of.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">
+        /// <exception cref="T:InvalidOperationException">
         /// <paramref name="source"/> contains no elements.</exception>
         public static Task<float> AverageAsync(this IQueryable<float> source, CancellationToken cancellationToken = default)
         {
@@ -932,14 +932,14 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the average of a sequence of nullable <see cref="T:System.Single"/> values.
+        /// Asynchronously computes the average of a sequence of nullable <see cref="T:float"/> values.
         /// </summary>
         /// <returns>
         /// A task that returns the average of the sequence of values, or null if the source sequence is empty or contains only null values.
         /// </returns>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Single"/> values to calculate the average of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <param name="source">A sequence of nullable <see cref="T:float"/> values to calculate the average of.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
         public static Task<float?> AverageAsync(this IQueryable<float?> source, CancellationToken cancellationToken = default)
         {
@@ -947,16 +947,16 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the average of a sequence of <see cref="T:System.Double"/> values.
+        /// Asynchronously computes the average of a sequence of <see cref="T:double"/> values.
         /// </summary>
         /// <returns>
         /// A task that returns the average of the sequence of values.
         /// </returns>
-        /// <param name="source">A sequence of <see cref="T:System.Double"/> values to calculate the average of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <param name="source">A sequence of <see cref="T:double"/> values to calculate the average of.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">
+        /// <exception cref="T:InvalidOperationException">
         /// <paramref name="source"/> contains no elements.</exception>
         public static Task<double> AverageAsync(this IQueryable<double> source, CancellationToken cancellationToken = default)
         {
@@ -964,14 +964,14 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the average of a sequence of nullable <see cref="T:System.Double"/> values.
+        /// Asynchronously computes the average of a sequence of nullable <see cref="T:double"/> values.
         /// </summary>
         /// <returns>
         /// A task that returns the average of the sequence of values, or null if the source sequence is empty or contains only null values.
         /// </returns>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Double"/> values to calculate the average of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <param name="source">A sequence of nullable <see cref="T:double"/> values to calculate the average of.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
         public static Task<double?> AverageAsync(this IQueryable<double?> source, CancellationToken cancellationToken = default)
         {
@@ -979,16 +979,16 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the average of a sequence of <see cref="T:System.Decimal"/> values.
+        /// Asynchronously computes the average of a sequence of <see cref="T:decimal"/> values.
         /// </summary>
         /// <returns>
         /// A task that returns the average of the sequence of values.
         /// </returns>
-        /// <param name="source">A sequence of <see cref="T:System.Decimal"/> values to calculate the average of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <param name="source">A sequence of <see cref="T:decimal"/> values to calculate the average of.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">
+        /// <exception cref="T:InvalidOperationException">
         /// <paramref name="source"/> contains no elements.</exception>
         public static Task<decimal> AverageAsync(this IQueryable<decimal> source, CancellationToken cancellationToken = default)
         {
@@ -996,14 +996,14 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the average of a sequence of nullable <see cref="T:System.Decimal"/> values.
+        /// Asynchronously computes the average of a sequence of nullable <see cref="T:decimal"/> values.
         /// </summary>
         /// <returns>
         /// A task that returns the average of the sequence of values, or null if the source sequence is empty or contains only null values.
         /// </returns>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Decimal"/> values to calculate the average of.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <param name="source">A sequence of nullable <see cref="T:decimal"/> values to calculate the average of.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> is null.</exception>
         public static Task<decimal?> AverageAsync(this IQueryable<decimal?> source, CancellationToken cancellationToken = default)
         {
@@ -1011,18 +1011,18 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the average of a sequence of <see cref="T:System.Int32"/> values that is obtained by invoking a projection function on each element of the input sequence.
+        /// Asynchronously computes the average of a sequence of <see cref="T:int"/> values that is obtained by invoking a projection function on each element of the input sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the average of the sequence of values.
         /// </returns>
         /// <param name="source">A sequence of values to calculate the average of.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">
+        /// <exception cref="T:InvalidOperationException">
         /// <paramref name="source"/> contains no elements.</exception>
         public static Task<double> AverageAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, int>> selector, CancellationToken cancellationToken = default)
         {
@@ -1030,16 +1030,16 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the average of a sequence of nullable <see cref="T:System.Int32"/> values that is obtained by invoking a projection function on each element of the input sequence.
+        /// Asynchronously computes the average of a sequence of nullable <see cref="T:int"/> values that is obtained by invoking a projection function on each element of the input sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the average of the sequence of values, or null if the <paramref name="source"/> sequence is empty or contains only null values.
         /// </returns>
         /// <param name="source">A sequence of values to calculate the average of.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static Task<double?> AverageAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, int?>> selector, CancellationToken cancellationToken = default)
         {
@@ -1047,18 +1047,18 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the average of a sequence of <see cref="T:System.Single"/> values that is obtained by invoking a projection function on each element of the input sequence.
+        /// Asynchronously computes the average of a sequence of <see cref="T:float"/> values that is obtained by invoking a projection function on each element of the input sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the average of the sequence of values.
         /// </returns>
         /// <param name="source">A sequence of values to calculate the average of.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">
+        /// <exception cref="T:InvalidOperationException">
         /// <paramref name="source"/> contains no elements.</exception>
         public static Task<float> AverageAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, float>> selector, CancellationToken cancellationToken = default)
         {
@@ -1066,16 +1066,16 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the average of a sequence of nullable <see cref="T:System.Single"/> values that is obtained by invoking a projection function on each element of the input sequence.
+        /// Asynchronously computes the average of a sequence of nullable <see cref="T:float"/> values that is obtained by invoking a projection function on each element of the input sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the average of the sequence of values, or null if the <paramref name="source"/> sequence is empty or contains only null values.
         /// </returns>
         /// <param name="source">A sequence of values to calculate the average of.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static Task<float?> AverageAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, float?>> selector, CancellationToken cancellationToken = default)
         {
@@ -1083,18 +1083,18 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the average of a sequence of <see cref="T:System.Int64"/> values that is obtained by invoking a projection function on each element of the input sequence.
+        /// Asynchronously computes the average of a sequence of <see cref="T:long"/> values that is obtained by invoking a projection function on each element of the input sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the average of the sequence of values.
         /// </returns>
         /// <param name="source">A sequence of values to calculate the average of.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">
+        /// <exception cref="T:InvalidOperationException">
         /// <paramref name="source"/> contains no elements.</exception>
         public static Task<double> AverageAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, long>> selector, CancellationToken cancellationToken = default)
         {
@@ -1102,16 +1102,16 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the average of a sequence of nullable <see cref="T:System.Int64"/> values that is obtained by invoking a projection function on each element of the input sequence.
+        /// Asynchronously computes the average of a sequence of nullable <see cref="T:long"/> values that is obtained by invoking a projection function on each element of the input sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the average of the sequence of values, or null if the <paramref name="source"/> sequence is empty or contains only null values.
         /// </returns>
         /// <param name="source">A sequence of values to calculate the average of.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static Task<double?> AverageAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, long?>> selector, CancellationToken cancellationToken = default)
         {
@@ -1119,18 +1119,18 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the average of a sequence of <see cref="T:System.Double"/> values that is obtained by invoking a projection function on each element of the input sequence.
+        /// Asynchronously computes the average of a sequence of <see cref="T:double"/> values that is obtained by invoking a projection function on each element of the input sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the average of the sequence of values.
         /// </returns>
         /// <param name="source">A sequence of values to calculate the average of.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">
+        /// <exception cref="T:InvalidOperationException">
         /// <paramref name="source"/> contains no elements.</exception>
         public static Task<double> AverageAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, double>> selector, CancellationToken cancellationToken = default)
         {
@@ -1138,16 +1138,16 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the average of a sequence of nullable <see cref="T:System.Double"/> values that is obtained by invoking a projection function on each element of the input sequence.
+        /// Asynchronously computes the average of a sequence of nullable <see cref="T:double"/> values that is obtained by invoking a projection function on each element of the input sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the average of the sequence of values, or null if the <paramref name="source"/> sequence is empty or contains only null values.
         /// </returns>
         /// <param name="source">A sequence of values to calculate the average of.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static Task<double?> AverageAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, double?>> selector, CancellationToken cancellationToken = default)
         {
@@ -1155,18 +1155,18 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the average of a sequence of <see cref="T:System.Decimal"/> values that is obtained by invoking a projection function on each element of the input sequence.
+        /// Asynchronously computes the average of a sequence of <see cref="T:decimal"/> values that is obtained by invoking a projection function on each element of the input sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the average of the sequence of values.
         /// </returns>
         /// <param name="source">A sequence of values that are used to calculate an average.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">
+        /// <exception cref="T:InvalidOperationException">
         /// <paramref name="source"/> contains no elements.</exception>
         public static Task<decimal> AverageAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, decimal>> selector, CancellationToken cancellationToken = default)
         {
@@ -1174,16 +1174,16 @@ namespace DamienG.System
         }
 
         /// <summary>
-        /// Asynchronously computes the average of a sequence of nullable <see cref="T:System.Decimal"/> values that is obtained by invoking a projection function on each element of the input sequence.
+        /// Asynchronously computes the average of a sequence of nullable <see cref="T:decimal"/> values that is obtained by invoking a projection function on each element of the input sequence.
         /// </summary>
         /// <returns>
         /// A task that returns the average of the sequence of values, or null if the <paramref name="source"/> sequence is empty or contains only null values.
         /// </returns>
         /// <param name="source">A sequence of values to calculate the average of.</param>
         /// <param name="selector">A projection function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static Task<decimal?> AverageAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, decimal?>> selector, CancellationToken cancellationToken = default)
         {
@@ -1198,11 +1198,11 @@ namespace DamienG.System
         /// </returns>
         /// <param name="source">A sequence to aggregate over.</param>
         /// <param name="func">An accumulator function to apply to each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="func"/> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">
+        /// <exception cref="T:InvalidOperationException">
         /// <paramref name="source"/> contains no elements.</exception>
         public static Task<TSource> AggregateAsync<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, TSource, TSource>> func, CancellationToken cancellationToken = default)
         {
@@ -1218,10 +1218,10 @@ namespace DamienG.System
         /// <param name="source">A sequence to aggregate over.</param>
         /// <param name="seed">The initial accumulator value.</param>
         /// <param name="func">An accumulator function to invoke on each element.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <typeparam name="TAccumulate">The type of the accumulator value.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="func"/> is null.</exception>
         public static Task<TAccumulate> AggregateAsync<TSource, TAccumulate>(this IQueryable<TSource> source, TAccumulate seed, Expression<Func<TAccumulate, TSource, TAccumulate>> func, CancellationToken cancellationToken = default)
         {
@@ -1238,11 +1238,11 @@ namespace DamienG.System
         /// <param name="seed">The initial accumulator value.</param>
         /// <param name="func">An accumulator function to invoke on each element.</param>
         /// <param name="selector">A function to transform the final accumulator value into the result value.</param>
-        /// <param name="cancellationToken">The optional <see cref="T:System.Threading.CancellationToken"/> which can be used to cancel this task.</param>
+        /// <param name="cancellationToken">The optional <see cref="T:CancellationToken"/> which can be used to cancel this task.</param>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <typeparam name="TAccumulate">The type of the accumulator value.</typeparam>
         /// <typeparam name="TResult">The type of the resulting value.</typeparam>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="T:ArgumentNullException">
         /// <paramref name="source"/> or <paramref name="func"/> or <paramref name="selector"/> is null.</exception>
         public static Task<TResult> AggregateAsync<TSource, TAccumulate, TResult>(this IQueryable<TSource> source, TAccumulate seed, Expression<Func<TAccumulate, TSource, TAccumulate>> func, Expression<Func<TAccumulate, TResult>> selector, CancellationToken cancellationToken = default)
         {

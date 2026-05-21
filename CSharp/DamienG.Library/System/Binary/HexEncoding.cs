@@ -36,7 +36,7 @@ namespace DamienG.System.Binary
             return output;
         }
 
-        int Hex(char a)
+        private static int Hex(char a)
         {
             if (a >= '0' && a <= '9')
                 return a - '0';
@@ -47,7 +47,7 @@ namespace DamienG.System.Binary
             if (a >= 'A' && a <= 'F')
                 return a - 'A' + 10;
 
-            throw new ArgumentOutOfRangeException(nameof(a), string.Format("Character {0} is not hexadecimal", a));
+            throw new ArgumentOutOfRangeException(nameof(a), $"Character {a} is not hexadecimal");
         }
     }
 }

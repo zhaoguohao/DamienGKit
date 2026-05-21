@@ -14,7 +14,7 @@ namespace DamienG.IO
     /// </summary>
     public class MulticastTextWriter : TextWriter
     {
-        readonly IList<TextWriter> textWriters;
+        private readonly IList<TextWriter> _textWriters;
 
         /// <summary>
         /// Create a new instance of <see cref="MulticastTextWriter"/>.
@@ -30,7 +30,7 @@ namespace DamienG.IO
         /// <param name="textWriters">The <see cref="TextWriter"/> instances to use.</param>
         public MulticastTextWriter(IList<TextWriter> textWriters)
         {
-            this.textWriters = new List<TextWriter>(textWriters);
+            this._textWriters = new List<TextWriter>(textWriters);
         }
 
         /// <inheritdoc/>
@@ -42,8 +42,8 @@ namespace DamienG.IO
         /// <param name="textWriter">The <see cref="TextWriter"/> to add.</param>
         public void Add(TextWriter textWriter)
         {
-            lock (textWriters)
-                textWriters.Add(textWriter);
+            lock (_textWriters)
+                _textWriters.Add(textWriter);
         }
 
         /// <summary>
@@ -52,15 +52,15 @@ namespace DamienG.IO
         /// <param name="textWriter">The <see cref="TextWriter"/> to remove.</param>
         public bool Remove(TextWriter textWriter)
         {
-            lock (textWriters)
-                return textWriters.Remove(textWriter);
+            lock (_textWriters)
+                return _textWriters.Remove(textWriter);
         }
 
         /// <inheritdoc/>
         public override void Write(char[] buffer, int index, int count)
         {
-            lock (textWriters)
-                foreach (var textWriter in textWriters)
+            lock (_textWriters)
+                foreach (var textWriter in _textWriters)
                     textWriter.Write(buffer, index, count);
         }
     }

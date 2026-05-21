@@ -23,11 +23,11 @@ namespace DamienG.Security.Cryptography
         public const UInt32 DefaultPolynomial = 0xedb88320u;
         public const UInt32 DefaultSeed = 0xffffffffu;
 
-        static UInt32[] defaultTable;
+        private static UInt32[] _defaultTable;
 
-        readonly UInt32 seed;
-        readonly UInt32[] table;
-        UInt32 hash;
+        private readonly UInt32 _seed;
+        private readonly UInt32[] _table;
+        private UInt32 _hash;
 
         /// <summary>
         /// Create a new <see cref="Crc32"/> with a <see cref="DefaultPolynomial"/> and <see cref="DefaultSeed"/>.
@@ -41,32 +41,32 @@ namespace DamienG.Security.Cryptography
         /// Create a new <see cref="Crc32"/> with a supplied polynomial and see.
         /// </summary>
         /// <param name="polynomial">The polynomial to use in calculating.</param>
-        /// <param name="polynomial">The initial seed to start from.</param>
+        /// <param name="seed">The initial seed to start from.</param>
         public Crc32(UInt32 polynomial, UInt32 seed)
         {
             if (!BitConverter.IsLittleEndian)
                 throw new PlatformNotSupportedException("Not supported on Big Endian processors");
 
-            table = InitializeTable(polynomial);
-            this.seed = hash = seed;
+            _table = InitializeTable(polynomial);
+            _seed = _hash = seed;
         }
 
         /// <inheritdoc/>
         public override void Initialize()
         {
-            hash = seed;
+            _hash = _seed;
         }
 
         /// <inheritdoc/>
         protected override void HashCore(byte[] array, int ibStart, int cbSize)
         {
-            hash = CalculateHash(table, hash, array, ibStart, cbSize);
+            _hash = CalculateHash(_table, _hash, array, ibStart, cbSize);
         }
 
         /// <inheritdoc/>
         protected override byte[] HashFinal()
         {
-            var hashBuffer = UInt32ToBigEndianBytes(~hash);
+            var hashBuffer = UInt32ToBigEndianBytes(~_hash);
             HashValue = hashBuffer;
             return hashBuffer;
         }
@@ -78,7 +78,10 @@ namespace DamienG.Security.Cryptography
         /// Calculate the <see cref="Crc32"/> for a given <paramref name="buffer"/> with the
         /// <see cref="DefaultSeed"/> and <see cref="DefaultPolynomial"/>.
         /// </summary>
-        /// <param name="buffer">The <see cref="byte[]"/> buffer to calcuate a CRC32 for.</param>
+        /// <param name="buffer">The <see>
+        ///         <cref>byte[]</cref>
+        ///     </see>
+        ///     buffer to calcuate a CRC32 for.</param>
         /// <returns>The CRC32 for the buffer.</returns>
         public static UInt32 Compute(byte[] buffer) => Compute(DefaultSeed, buffer);
 
@@ -87,7 +90,10 @@ namespace DamienG.Security.Cryptography
         /// specified <paramref name="seed"/> and <see cref="DefaultPolynomial"/>.
         /// </summary>
         /// <param name="seed">The initial seed to start from.</param>
-        /// <param name="buffer">The <see cref="byte[]"/> buffer to calcuate a CRC32 for.</param>
+        /// <param name="buffer">The <see>
+        ///         <cref>byte[]</cref>
+        ///     </see>
+        ///     buffer to calcuate a CRC32 for.</param>
         /// <returns>The CRC32 for the buffer.</returns>
         public static UInt32 Compute(UInt32 seed, byte[] buffer) => Compute(DefaultPolynomial, seed, buffer);
 
@@ -95,8 +101,12 @@ namespace DamienG.Security.Cryptography
         /// Calculate the <see cref="Crc32"/> for a given <paramref name="buffer"/> with a
         /// specified <paramref name="seed"/> and <paramref name="polynomial"/>.
         /// </summary>
+        /// <param name="polynomial">The polynomial to calculate a CRC32 from.</param>
         /// <param name="seed">The initial seed to start from.</param>
-        /// <param name="buffer">The <see cref="byte[]"/> buffer to calcuate a CRC32 for.</param>
+        /// <param name="buffer">The <see>
+        ///         <cref>byte[]</cref>
+        ///     </see>
+        ///     buffer to calcuate a CRC32 for.</param>
         /// <returns>The CRC32 for the buffer.</returns>
         public static UInt32 Compute(UInt32 polynomial, UInt32 seed, byte[] buffer) => 
             ~CalculateHash(InitializeTable(polynomial), seed, buffer, 0, buffer.Length);
@@ -105,11 +115,14 @@ namespace DamienG.Security.Cryptography
         /// Initialize a CRC32 calculation table for a given polynomial.
         /// </summary>
         /// <param name="polynomial">The polynomial to calculate a table for.</param>
-        /// <returns>A <see cref="UInt32[]"/> table to be used in calculating a CRC32.</returns>
-        static UInt32[] InitializeTable(UInt32 polynomial)
+        /// <returns>A <see>
+        ///         <cref>UInt32[]</cref>
+        ///     </see>
+        ///     table to be used in calculating a CRC32.</returns>
+        private static UInt32[] InitializeTable(UInt32 polynomial)
         {
-            if (polynomial == DefaultPolynomial && defaultTable != null)
-                return defaultTable;
+            if (polynomial == DefaultPolynomial && _defaultTable != null)
+                return _defaultTable;
 
             var createTable = new UInt32[256];
             for (var i = 0; i < 256; i++)
@@ -124,7 +137,7 @@ namespace DamienG.Security.Cryptography
             }
 
             if (polynomial == DefaultPolynomial)
-                defaultTable = createTable;
+                _defaultTable = createTable;
 
             return createTable;
         }
@@ -139,7 +152,7 @@ namespace DamienG.Security.Cryptography
         /// <param name="size">How many bytes within the <paramref name="buffer"/> to read in calculating the CRC32.</param>
         /// <returns>The bit-inverted CRC32.</returns>
         /// <remarks>This hash is bit-inverted. Use other methods in this class or <see langword="~"/> the result from this method.</remarks>
-        static UInt32 CalculateHash(UInt32[] table, UInt32 seed, IList<byte> buffer, int start, int size)
+        private static UInt32 CalculateHash(UInt32[] table, UInt32 seed, IList<byte> buffer, int start, int size)
         {
             var hash = seed;
             for (var i = start; i < start + size; i++)
@@ -148,12 +161,18 @@ namespace DamienG.Security.Cryptography
         }
 
         /// <summary>
-        /// Convert a <see cref="UInt32"/> to a <see cref="byte[]"/> taking care
+        /// Convert a <see cref="UInt32"/> to a <see>
+        ///     <cref>byte[]</cref>
+        /// </see>
+        /// taking care
         /// to reverse the bytes on little endian processors.
         /// </summary>
         /// <param name="uint32">The <see cref="UInt32"/> to convert.</param>
-        /// <returns>The <see cref="byte[]"/> containing the converted bytes.</returns>
-        static byte[] UInt32ToBigEndianBytes(UInt32 uint32)
+        /// <returns>The <see>
+        ///         <cref>byte[]</cref>
+        ///     </see>
+        ///     containing the converted bytes.</returns>
+        private static byte[] UInt32ToBigEndianBytes(UInt32 uint32)
         {
             var result = BitConverter.GetBytes(uint32);
 

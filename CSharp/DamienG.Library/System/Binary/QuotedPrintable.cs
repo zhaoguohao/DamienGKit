@@ -17,9 +17,9 @@ namespace DamienG.System.Binary
 
     public class QuotedPrintable : BinaryTextEncoding
     {
-        readonly bool encodeSpaces = true;
-        readonly bool encodeTabs = true;
-        const int maxLineLength = 76;
+        private readonly bool _encodeSpaces = true;
+        private readonly bool _encodeTabs = true;
+        private const int MaxLineLength = 76;
 
         public QuotedPrintable()
         {
@@ -27,8 +27,8 @@ namespace DamienG.System.Binary
 
         public QuotedPrintable(DoNotEncode doNotEncode)
         {
-            encodeTabs = !doNotEncode.HasFlag(DoNotEncode.Tab);
-            encodeSpaces = !doNotEncode.HasFlag(DoNotEncode.Space);
+            _encodeTabs = !doNotEncode.HasFlag(DoNotEncode.Tab);
+            _encodeSpaces = !doNotEncode.HasFlag(DoNotEncode.Space);
         }
 
         public override string Encode(byte[] bytes)
@@ -38,28 +38,28 @@ namespace DamienG.System.Binary
             var column = 0;
             string nextOutput = null;
 
-            void checkForEndOfLine()
+            foreach (var b in bytes)
             {
-                if (column + nextOutput.Length >= maxLineLength)
+                nextOutput = ShouldEncode(b) ? "=" + b.ToString("X2") : Char.ToString((char)b);
+
+                CheckForEndOfLine();
+                sb.Append(nextOutput);
+                column += nextOutput.Length;
+            }
+
+            if (nextOutput != null && nextOutput.Length == 1 && nextOutput[0] <= 32)
+                sb.Append("=");
+
+            return sb.ToString();
+
+            void CheckForEndOfLine()
+            {
+                if (column + nextOutput.Length >= MaxLineLength)
                 {
                     sb.Append("=\n");
                     column = 0;
                 }
             }
-
-            foreach (var b in bytes)
-            {
-                nextOutput = ShouldEncode(b) ? "=" + b.ToString("X2") : Char.ToString((char)b);
-
-                checkForEndOfLine();
-                sb.Append(nextOutput);
-                column += nextOutput.Length;
-            }
-
-            if (nextOutput.Length == 1 && nextOutput[0] <= 32)
-                sb.Append("=");
-
-            return sb.ToString();
         }
 
         public override byte[] Decode(string input)
@@ -91,17 +91,17 @@ namespace DamienG.System.Binary
             return output.ToArray();
         }
 
-        bool ShouldEncode(byte b)
+        private bool ShouldEncode(byte b)
         {
             if (b == ' ')
-                return encodeSpaces;
+                return _encodeSpaces;
             if (b == '\t')
-                return encodeTabs;
+                return _encodeTabs;
 
-            return (b < 33 || b > 126 || b == '=');
+            return b < 33 || b > 126 || b == '=';
         }
 
-        int Hex(char a)
+        private static int Hex(char a)
         {
             if (a >= '0' && a <= '9')
                 return a - '0';

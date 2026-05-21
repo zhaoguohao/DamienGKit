@@ -14,7 +14,7 @@ namespace DamienG.IO
     /// </summary>
     public class ActionTextWriter : TextWriter
     {
-        readonly Action<string> action;
+        private readonly Action<string> _action;
 
         /// <summary>
         /// Create a new instance of <see cref="ActionTextWriter"/>.
@@ -22,7 +22,7 @@ namespace DamienG.IO
         /// <param name="action">The <see cref="Action{String}"/> to call every time text should be written.</param>
         public ActionTextWriter(Action<string> action)
         {
-            this.action = action;
+            this._action = action;
         }
 
         /// <inheritdoc/>
@@ -32,6 +32,6 @@ namespace DamienG.IO
         public override void Write(char[] buffer, int index, int count) => Write(new string(buffer, index, count));
 
         /// <inheritdoc/>
-        public override void Write(string value) => action(value);
+        public override void Write(string value) => _action(value);
     }
 }

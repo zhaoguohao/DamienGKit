@@ -17,7 +17,7 @@ namespace DamienG.IO
     /// </remarks>
     public class LengthOnlyStream : Stream
     {
-        long length;
+        private long _length;
 
         /// <inheritdoc/>
         public override bool CanRead => false;
@@ -29,7 +29,7 @@ namespace DamienG.IO
         public override bool CanWrite => true;
 
         /// <inheritdoc/>
-        public override long Length => length;
+        public override long Length => _length;
 
         /// <inheritdoc/>
         public override long Position { get; set; }
@@ -38,7 +38,7 @@ namespace DamienG.IO
         public override void Flush() { }
 
         /// <summary>
-        /// Can not read the stream as it does not exist. Will instead throw a <exception cref="NotImplementedException">.
+        /// Can not read the stream as it does not exist. Will instead throw a <exception cref="NotImplementedException" />.
         /// </summary>
         /// <param name="buffer">Ignored.</param>
         /// <param name="offset">Ignored.</param>
@@ -50,15 +50,15 @@ namespace DamienG.IO
         /// <summary>
         /// Resets the stream - specifically the length back to zero.
         /// </summary>
-        public void Reset() => length = 0;
+        public void Reset() => _length = 0;
 
         /// <inheritdoc/>
         public override long Seek(long offset, SeekOrigin origin) => 0;
 
         /// <inheritdoc/>
-        public override void SetLength(long value) => length = value;
+        public override void SetLength(long value) => _length = value;
 
         /// <inheritdoc/>
-        public override void Write(byte[] buffer, int offset, int count) => length += count - offset;
+        public override void Write(byte[] buffer, int offset, int count) => _length += count - offset;
     }
 }

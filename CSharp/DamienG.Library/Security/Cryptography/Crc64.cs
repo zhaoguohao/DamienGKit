@@ -19,10 +19,10 @@ namespace DamienG.Security.Cryptography
     {
         public const UInt64 DefaultSeed = 0x0;
 
-        readonly UInt64[] table;
+        private readonly UInt64[] _table;
 
-        readonly UInt64 seed;
-        UInt64 hash;
+        private readonly UInt64 _seed;
+        private UInt64 _hash;
 
         public Crc64(UInt64 polynomial)
             :  this(polynomial, DefaultSeed)
@@ -34,41 +34,41 @@ namespace DamienG.Security.Cryptography
             if (!BitConverter.IsLittleEndian)
                 throw new PlatformNotSupportedException("Not supported on Big Endian processors");
 
-            table = InitializeTable(polynomial);
-            this.seed = hash = seed;
+            _table = InitializeTable(polynomial);
+            _seed = _hash = seed;
         }
 
         public override void Initialize()
         {
-            hash = seed;
+            _hash = _seed;
         }
 
         protected override void HashCore(byte[] array, int ibStart, int cbSize)
         {
-            hash = CalculateHash(hash, table, array, ibStart, cbSize);
+            _hash = CalculateHash(_hash, _table, array, ibStart, cbSize);
         }
 
         protected override byte[] HashFinal()
         {
-            var hashBuffer = UInt64ToBigEndianBytes(hash);
+            var hashBuffer = UInt64ToBigEndianBytes(_hash);
             HashValue = hashBuffer;
             return hashBuffer;
         }
 
-        public override int HashSize { get { return 64; } }
+        public override int HashSize => 64;
 
         protected static UInt64 CalculateHash(UInt64 seed, UInt64[] table, IList<byte> buffer, int start, int size)
         {
             var hash = seed;
             for (var i = start; i < start + size; i++)
-                unchecked
-                {
-                    hash = (hash >> 8) ^ table[(buffer[i] ^ hash) & 0xff];
-                }
+            {
+                hash = (hash >> 8) ^ table[(buffer[i] ^ hash) & 0xff];
+            }
+
             return hash;
         }
 
-        static byte[] UInt64ToBigEndianBytes(UInt64 value)
+        private static byte[] UInt64ToBigEndianBytes(UInt64 value)
         {
             var result = BitConverter.GetBytes(value);
 
@@ -78,7 +78,7 @@ namespace DamienG.Security.Cryptography
             return result;
         }
 
-        static UInt64[] InitializeTable(UInt64 polynomial)
+        private static UInt64[] InitializeTable(UInt64 polynomial)
         {
             if (polynomial == Crc64Iso.Iso3309Polynomial && Crc64Iso.Table != null)
                 return Crc64Iso.Table;

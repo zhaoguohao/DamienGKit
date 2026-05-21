@@ -86,8 +86,7 @@ namespace DamienG.IO
             return read;
         }
 
-        /// <inheritdoc/>
-        void TrackPosition(IList<char> buffer, int index, int count)
+        private void TrackPosition(IList<char> buffer, int index, int count)
         {
             for (var i = index; i < count; i++)
                 if (buffer[i] == '\n')

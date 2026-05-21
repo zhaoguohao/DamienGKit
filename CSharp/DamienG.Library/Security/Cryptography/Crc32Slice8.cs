@@ -29,11 +29,11 @@ namespace DamienG.Security.Cryptography
         public const UInt32 DefaultPolynomial = 0xedb88320u;
         public const UInt32 DefaultSeed = 0xffffffffu;
 
-        static UInt32[,] defaultTable;
+        private static UInt32[,] _defaultTable;
 
-        readonly UInt32 seed;
-        readonly UInt32[,] table;
-        UInt32 hash;
+        private readonly UInt32 _seed;
+        private readonly UInt32[,] _table;
+        private UInt32 _hash;
 
         public Crc32Slice8()
             : this(DefaultPolynomial, DefaultSeed)
@@ -45,28 +45,28 @@ namespace DamienG.Security.Cryptography
             if (!BitConverter.IsLittleEndian)
                 throw new PlatformNotSupportedException("Not supported on Big Endian processors");
 
-            table = InitializeTable(polynomial);
-            this.seed = hash = seed;
+            _table = InitializeTable(polynomial);
+            _seed = _hash = seed;
         }
 
         public override void Initialize()
         {
-            hash = seed;
+            _hash = _seed;
         }
 
         protected override void HashCore(byte[] array, int ibStart, int cbSize)
         {
-            hash = CalculateHash(table, hash, array, ibStart, cbSize);
+            _hash = CalculateHash(_table, _hash, array, ibStart, cbSize);
         }
 
         protected override byte[] HashFinal()
         {
-            var hashBuffer = UInt32ToBigEndianBytes(~hash);
+            var hashBuffer = UInt32ToBigEndianBytes(~_hash);
             HashValue = hashBuffer;
             return hashBuffer;
         }
 
-        public override int HashSize { get { return 32; } }
+        public override int HashSize => 32;
 
         public static UInt32 Compute(byte[] buffer)
         {
@@ -83,10 +83,10 @@ namespace DamienG.Security.Cryptography
             return ~CalculateHash(InitializeTable(polynomial), seed, buffer, 0, buffer.Length);
         }
 
-        static UInt32[,] InitializeTable(UInt32 polynomial)
+        private static UInt32[,] InitializeTable(UInt32 polynomial)
         {
-            if (polynomial == DefaultPolynomial && defaultTable != null)
-                return defaultTable;
+            if (polynomial == DefaultPolynomial && _defaultTable != null)
+                return _defaultTable;
 
             var table = new UInt32[8, 256];
 
@@ -115,12 +115,12 @@ namespace DamienG.Security.Cryptography
             }
 
             if (polynomial == DefaultPolynomial)
-                defaultTable = table;
+                _defaultTable = table;
 
             return table;
         }
 
-        static UInt32 CalculateHash(UInt32[,] table, UInt32 seed, byte[] buffer, int start, int size)
+        private static UInt32 CalculateHash(UInt32[,] table, UInt32 seed, byte[] buffer, int start, int size)
         {
             var hash = seed;
 
@@ -153,7 +153,7 @@ namespace DamienG.Security.Cryptography
             return hash;
         }
 
-        static byte[] UInt32ToBigEndianBytes(UInt32 uint32)
+        private static byte[] UInt32ToBigEndianBytes(UInt32 uint32)
         {
             var result = BitConverter.GetBytes(uint32);
 

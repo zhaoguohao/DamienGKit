@@ -14,37 +14,31 @@ namespace DamienG.System
     /// <typeparam name="T"></typeparam>
     public sealed class EquatableWeakReference<T> : IEquatable<EquatableWeakReference<T>>, IDisposable where T : class
     {
-        readonly int hashCode;
-        GCHandle handle;
+        private readonly int _hashCode;
+        private GCHandle _handle;
 
         public EquatableWeakReference(T target)
         {
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
-            hashCode = target.GetHashCode();
-            handle = GCHandle.Alloc(target, GCHandleType.Weak);
+            _hashCode = target.GetHashCode();
+            _handle = GCHandle.Alloc(target, GCHandleType.Weak);
         }
 
-        public bool IsAlive
-        {
-            get { return (handle.Target != null); }
-        }
+        public bool IsAlive => _handle.Target != null;
 
-        public T Target
-        {
-            get { return handle.Target as T; }
-        }
+        public T Target => _handle.Target as T;
 
         public void Dispose()
         {
-            if (handle.IsAllocated)
-                handle.Free();
+            if (_handle.IsAllocated)
+                _handle.Free();
             GC.SuppressFinalize(this);
         }
 
         public bool Equals(EquatableWeakReference<T> other)
         {
-            return ReferenceEquals(other.Target, Target);
+            return other != null && ReferenceEquals(other.Target, Target);
         }
 
         ~EquatableWeakReference()
@@ -52,16 +46,16 @@ namespace DamienG.System
             Dispose();
         }
 
-        /// </inheritdoc>
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             return obj is EquatableWeakReference<T> reference && Equals(reference);
         }
 
-        /// </inheritdoc>
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
-            return hashCode;
+            return _hashCode;
         }
     }
 }

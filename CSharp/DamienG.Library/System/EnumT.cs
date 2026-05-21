@@ -15,11 +15,11 @@ namespace DamienG.System
     /// <typeparam name="T">Type of Enum</typeparam>
     public static class Enum<T> where T : struct, IConvertible
     {
-        static readonly IEnumerable<T> all = Enum.GetValues(typeof (T)).Cast<T>();
-        static readonly Dictionary<string, T> insensitiveNames = all.ToDictionary(k => Enum.GetName(typeof (T), k).ToUpperInvariant());
-        static readonly Dictionary<string, T> sensitiveNames = all.ToDictionary(k => Enum.GetName(typeof (T), k));
-        static readonly Dictionary<int, T> values = all.ToDictionary(k => Convert.ToInt32(k));
-        static readonly Dictionary<T, string> names = all.ToDictionary(k => k, v => v.ToString());
+        private static readonly IEnumerable<T> all = Enum.GetValues(typeof (T)).Cast<T>();
+        private static readonly Dictionary<string, T> insensitiveNames = all.ToDictionary(k => Enum.GetName(typeof (T), k)?.ToUpperInvariant());
+        private static readonly Dictionary<string, T> sensitiveNames = all.ToDictionary(k => Enum.GetName(typeof (T), k));
+        private static readonly Dictionary<int, T> values = all.ToDictionary(k => Convert.ToInt32(k));
+        private static readonly Dictionary<T, string> names = all.ToDictionary(k => k, v => v.ToString());
 
         public static bool IsDefined(T value) => names.Keys.Contains(value);
 
@@ -33,13 +33,13 @@ namespace DamienG.System
 
         public static string GetName(T value)
         {
-            names.TryGetValue(value, out string name);
+            names.TryGetValue(value, out var name);
             return name;
         }
 
         public static T Parse(string value)
         {
-            if (!sensitiveNames.TryGetValue(value, out T parsed))
+            if (!sensitiveNames.TryGetValue(value, out var parsed))
                 throw new ArgumentException("Value is not one of the named constants defined for the enumeration", nameof(value));
             return parsed;
         }
@@ -49,7 +49,7 @@ namespace DamienG.System
             if (!ignoreCase)
                 return Parse(value);
 
-            if (!insensitiveNames.TryGetValue(value.ToUpperInvariant(), out T parsed))
+            if (!insensitiveNames.TryGetValue(value.ToUpperInvariant(), out var parsed))
                 throw new ArgumentException("Value is not one of the named constants defined for the enumeration", nameof(value));
             return parsed;
         }
@@ -68,7 +68,7 @@ namespace DamienG.System
             if (string.IsNullOrEmpty(value))
                 return null;
 
-            if (sensitiveNames.TryGetValue(value, out T foundValue))
+            if (sensitiveNames.TryGetValue(value, out var foundValue))
                 return foundValue;
 
             return null;
@@ -82,7 +82,7 @@ namespace DamienG.System
             if (string.IsNullOrEmpty(value))
                 return null;
 
-            if (insensitiveNames.TryGetValue(value.ToUpperInvariant(), out T foundValue))
+            if (insensitiveNames.TryGetValue(value.ToUpperInvariant(), out var foundValue))
                 return foundValue;
 
             return null;
@@ -90,7 +90,7 @@ namespace DamienG.System
 
         public static T? CastOrNull(int value)
         {
-            if (values.TryGetValue(value, out T foundValue))
+            if (values.TryGetValue(value, out var foundValue))
                 return foundValue;
 
             return null;
@@ -104,8 +104,8 @@ namespace DamienG.System
 
         public static T SetFlags(IEnumerable<T> flags)
         {
-            var combined = flags.Aggregate(default(int), (current, flag) => current | Convert.ToInt32(flag));
-            return values.TryGetValue(combined, out T result) ? result : default;
+            var combined = flags.Aggregate(0, (current, flag) => current | Convert.ToInt32(flag));
+            return values.TryGetValue(combined, out var result) ? result : default;
         }
     }
 }
