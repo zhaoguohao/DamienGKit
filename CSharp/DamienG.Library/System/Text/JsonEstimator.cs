@@ -65,10 +65,18 @@ namespace DamienG.System.Text
                     return dou.ToString(CultureInfo.InvariantCulture).Length;
                 case Single sin:
                     return sin.ToString(CultureInfo.InvariantCulture).Length;
+                case TimeSpan ts:
+                    return ts.ToString("c", CultureInfo.InvariantCulture).Length + 2;
+                case Uri uri:
+                    return EstimateString(uri.ToString());
+                case Enum e:
+                    return Convert.ToInt64(e, CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture).Length;
+                case byte[] bytes:
+                    return bytes.Length == 0 ? 2 : 4 * ((bytes.Length + 2) / 3) + 2;
                 case IEnumerable enumerable:
                     return EstimateEnumerable(enumerable, includeNulls);
             }
-            
+
             return EstimateObject(obj, includeNulls);
         }
 

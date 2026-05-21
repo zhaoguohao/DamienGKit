@@ -256,6 +256,72 @@ namespace DamienG.Tests.System.Text
             Assert.Equal(22, JsonEstimator.Estimate(obj, true));
         }
 
+        [Fact]
+        public void TimeSpanZeroEstimatesAsTen()
+        {
+            // "00:00:00" = 10 chars including surrounding quotes.
+            Assert.Equal(10, JsonEstimator.Estimate(TimeSpan.Zero, true));
+        }
+
+        [Fact]
+        public void TimeSpanWithDaysAndFractionMatchesSerialized()
+        {
+            // "c" format: "1.02:03:04.0050000" = 18, plus 2 quotes = 20.
+            var ts = new TimeSpan(1, 2, 3, 4, 5);
+            Assert.Equal(20, JsonEstimator.Estimate(ts, true));
+        }
+
+        [Fact]
+        public void UriEstimateMatchesStringForm()
+        {
+            // "https://example.com/" = 22.
+            Assert.Equal(22, JsonEstimator.Estimate(new Uri("https://example.com/"), true));
+        }
+
+        [Fact]
+        public void UriEscapesAreCounted()
+        {
+            // %20 inside an URI is already escaped; no JSON escapes required → length+2.
+            var uri = new Uri("https://example.com/a%20b");
+            Assert.Equal(uri.ToString().Length + 2, JsonEstimator.Estimate(uri, true));
+        }
+
+        [Theory]
+        [InlineData(Color.Red, 1)]    // 0
+        [InlineData(Color.Green, 1)]  // 1
+        [InlineData(Color.Blue, 1)]   // 2
+        [InlineData(Color.Big, 3)]    // 100
+        public void EnumEstimateIsNumericDigitCount(Color value, int expected)
+        {
+            Assert.Equal(expected, JsonEstimator.Estimate(value, true));
+        }
+
+        [Fact]
+        public void EmptyByteArrayEstimatesAsTwo()
+        {
+            Assert.Equal(2, JsonEstimator.Estimate(new byte[0], true));
+        }
+
+        [Theory]
+        [InlineData(1, 6)]    // 1 byte → 4 base64 chars + 2 quotes
+        [InlineData(2, 6)]    // 2 bytes → 4 base64 chars + 2 quotes
+        [InlineData(3, 6)]    // 3 bytes → 4 base64 chars + 2 quotes
+        [InlineData(4, 10)]   // 4 bytes → 8 base64 chars + 2 quotes
+        [InlineData(100, 138)] // 100 bytes → 136 base64 chars + 2 quotes
+        public void ByteArrayEstimateMatchesBase64Length(int byteCount, int expected)
+        {
+            var bytes = new byte[byteCount];
+            Assert.Equal(expected, JsonEstimator.Estimate(bytes, true));
+        }
+
+        public enum Color
+        {
+            Red = 0,
+            Green = 1,
+            Blue = 2,
+            Big = 100
+        }
+
         private class Person
         {
             public string Name { get; set; }
