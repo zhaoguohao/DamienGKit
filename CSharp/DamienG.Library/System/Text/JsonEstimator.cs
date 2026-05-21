@@ -59,11 +59,7 @@ namespace DamienG.System.Text
                 case String s:
                     return s.Length + 2;
                 case Decimal dec:
-                {
-                    var left = (long)Math.Floor(dec % 10);
-                    var right = BitConverter.GetBytes(decimal.GetBits(dec)[3])[2];
-                    return right == 0 ? left : left + right + 1;
-                }
+                    return dec.ToString(CultureInfo.InvariantCulture).Length;
                 case Double dou:
                     return dou.ToString(CultureInfo.InvariantCulture).Length;
                 case Single sin:
