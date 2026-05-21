@@ -5,6 +5,8 @@
 
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 
@@ -145,6 +147,45 @@ namespace DamienG.System.Text
 
         private static readonly BindingFlags publicInstance = BindingFlags.Instance | BindingFlags.Public;
 
+        private readonly struct Member
+        {
+            public Member(string name, Func<object, object> getter)
+            {
+                Name = name;
+                Getter = getter;
+            }
+
+            public string Name { get; }
+            public Func<object, object> Getter { get; }
+        }
+
+        private static readonly ConcurrentDictionary<Type, Member[]> memberCache = new ConcurrentDictionary<Type, Member[]>();
+
+        private static Member[] GetMembers(Type type)
+        {
+            if (memberCache.TryGetValue(type, out var cached))
+                return cached;
+
+            var members = new List<Member>();
+            foreach (var p in type.GetProperties(publicInstance))
+            {
+                if (p.CanRead && p.CanWrite)
+                {
+                    var prop = p; // capture
+                    members.Add(new Member(prop.Name, o => prop.GetValue(o)));
+                }
+            }
+            foreach (var f in type.GetFields(publicInstance))
+            {
+                var field = f; // capture
+                members.Add(new Member(field.Name, o => field.GetValue(o)));
+            }
+
+            var array = members.ToArray();
+            memberCache[type] = array;
+            return array;
+        }
+
         private static long EstimateDictionary(IDictionary dictionary, bool includeNulls)
         {
             long size = 2; // { }
@@ -171,30 +212,10 @@ namespace DamienG.System.Text
         {
             long size = 2;
             var wasFirst = true;
-            var type = obj.GetType();
 
-            var properties = type.GetProperties(publicInstance);
-            foreach (var property in properties)
+            foreach (var member in GetMembers(obj.GetType()))
             {
-                if (property.CanRead && property.CanWrite)
-                {
-                    var value = property.GetValue(obj);
-                    if (includeNulls || value != null)
-                    {
-                        if (!wasFirst)
-                            size++;
-                        else
-                            wasFirst = false;
-
-                        size += property.Name.Length + 3 + Estimate(value, includeNulls);
-                    }
-                }
-            }
-
-            var fields = type.GetFields(publicInstance);
-            foreach (var field in fields)
-            {
-                var value = field.GetValue(obj);
+                var value = member.Getter(obj);
                 if (includeNulls || value != null)
                 {
                     if (!wasFirst)
@@ -202,7 +223,7 @@ namespace DamienG.System.Text
                     else
                         wasFirst = false;
 
-                    size += field.Name.Length + 3 + Estimate(value, includeNulls);
+                    size += member.Name.Length + 3 + Estimate(value, includeNulls);
                 }
             }
 
