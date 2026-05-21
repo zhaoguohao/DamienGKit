@@ -59,6 +59,6 @@ namespace DamienG.IO
         public override void SetLength(long value) => _length = value;
 
         /// <inheritdoc/>
-        public override void Write(byte[] buffer, int offset, int count) => _length += count - offset;
+        public override void Write(byte[] buffer, int offset, int count) => _length += count;
     }
 }

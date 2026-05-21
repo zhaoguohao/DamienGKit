@@ -1,0 +1,210 @@
+using System;
+using System.Collections.Generic;
+using DamienG.System.Text;
+using Xunit;
+
+namespace DamienG.Tests.System.Text
+{
+    public class JsonEstimatorTests
+    {
+        [Fact]
+        public void NullEstimatesAsFour()
+        {
+            Assert.Equal(4, JsonEstimator.Estimate(null, true));
+        }
+
+        [Fact]
+        public void BoolTrueEstimatesAsFour()
+        {
+            Assert.Equal(4, JsonEstimator.Estimate(true, true));
+        }
+
+        [Fact]
+        public void BoolFalseEstimatesAsFive()
+        {
+            Assert.Equal(5, JsonEstimator.Estimate(false, true));
+        }
+
+        [Fact]
+        public void ByteEstimatesAsOne()
+        {
+            Assert.Equal(1, JsonEstimator.Estimate((byte)200, true));
+        }
+
+        [Fact]
+        public void SByteEstimatesAsOne()
+        {
+            Assert.Equal(1, JsonEstimator.Estimate((sbyte)-10, true));
+        }
+
+        [Fact]
+        public void CharEstimatesAsThree()
+        {
+            Assert.Equal(3, JsonEstimator.Estimate('x', true));
+        }
+
+        [Fact]
+        public void GuidEstimatesAs38()
+        {
+            Assert.Equal(38, JsonEstimator.Estimate(Guid.NewGuid(), true));
+        }
+
+        [Fact]
+        public void DateTimeEstimatesAs35()
+        {
+            Assert.Equal(35, JsonEstimator.Estimate(DateTime.UtcNow, true));
+        }
+
+        [Fact]
+        public void DateTimeOffsetEstimatesAs35()
+        {
+            Assert.Equal(35, JsonEstimator.Estimate(DateTimeOffset.UtcNow, true));
+        }
+
+        [Theory]
+        [InlineData(0, 1)]
+        [InlineData(7, 1)]
+        [InlineData(99, 2)]
+        [InlineData(-5, 2)]
+        [InlineData(1000, 4)]
+        [InlineData(-1000, 5)]
+        public void Int32EstimateMatchesStringLength(int value, int expected)
+        {
+            Assert.Equal(expected, JsonEstimator.Estimate(value, true));
+        }
+
+        [Fact]
+        public void Int16EstimateMatchesStringLength()
+        {
+            Assert.Equal(6, JsonEstimator.Estimate((short)-12345, true));
+        }
+
+        [Fact]
+        public void Int64EstimateMatchesStringLength()
+        {
+            Assert.Equal(19, JsonEstimator.Estimate(1234567890123456789L, true));
+        }
+
+        [Fact]
+        public void UInt16Estimate()
+        {
+            Assert.Equal(5, JsonEstimator.Estimate((ushort)65535, true));
+        }
+
+        [Fact]
+        public void UInt32Estimate()
+        {
+            Assert.Equal(10, JsonEstimator.Estimate(4000000000u, true));
+        }
+
+        [Fact]
+        public void UInt64Estimate()
+        {
+            Assert.Equal(20, JsonEstimator.Estimate(ulong.MaxValue, true));
+        }
+
+        [Fact]
+        public void StringEstimateIsLengthPlusQuotes()
+        {
+            Assert.Equal(7, JsonEstimator.Estimate("hello", true));
+            Assert.Equal(2, JsonEstimator.Estimate("", true));
+        }
+
+        [Theory]
+        [InlineData("1", 1)]
+        [InlineData("1.0", 3)]
+        [InlineData("123.45", 6)]
+        [InlineData("-5", 2)]
+        [InlineData("0.0001", 6)]
+        public void DecimalEstimateMatchesStringLength(string literal, int expected)
+        {
+            var d = decimal.Parse(literal, global::System.Globalization.CultureInfo.InvariantCulture);
+            Assert.Equal(expected, JsonEstimator.Estimate(d, true));
+        }
+
+        [Fact]
+        public void DoubleEstimateMatchesStringLength()
+        {
+            Assert.Equal(4, JsonEstimator.Estimate(1.25, true));
+        }
+
+        [Fact]
+        public void FloatEstimateMatchesStringLength()
+        {
+            Assert.Equal(4, JsonEstimator.Estimate(1.25f, true));
+        }
+
+        [Fact]
+        public void EmptyEnumerableEstimatesAsTwo()
+        {
+            Assert.Equal(2, JsonEstimator.Estimate(new int[0], true));
+        }
+
+        [Fact]
+        public void SingleItemArrayEstimatesAsThree()
+        {
+            // "[1]"
+            Assert.Equal(3, JsonEstimator.Estimate(new[] { 1 }, true));
+        }
+
+        [Fact]
+        public void MultiItemArrayMatchesSerializedLength()
+        {
+            // "[1,2,3]" = 7 chars
+            Assert.Equal(7, JsonEstimator.Estimate(new[] { 1, 2, 3 }, true));
+        }
+
+        [Fact]
+        public void EmptyDictionaryEstimatesAsTwo()
+        {
+            Assert.Equal(2, JsonEstimator.Estimate(new Dictionary<string, int>(), true));
+        }
+
+        [Fact]
+        public void DictionaryEstimateMatchesSerializedLength()
+        {
+            // {"a":1,"b":2} = 13
+            var dict = new Dictionary<string, int> { ["a"] = 1, ["b"] = 2 };
+            Assert.Equal(13, JsonEstimator.Estimate(dict, true));
+        }
+
+        [Fact]
+        public void DictionarySkipsNullValuesWhenIncludeNullsFalse()
+        {
+            var dict = new Dictionary<string, string> { ["a"] = "x", ["b"] = null };
+            // includeNulls = true:  {"a":"x","b":null} = 18
+            // includeNulls = false: {"a":"x"}          = 9
+            Assert.Equal(9, JsonEstimator.Estimate(dict, false));
+        }
+
+        [Fact]
+        public void ObjectEstimateUsesProperties()
+        {
+            // {"Name":"Bob","Age":30} = 23
+            var obj = new Person { Name = "Bob", Age = 30 };
+            Assert.Equal(23, JsonEstimator.Estimate(obj, true));
+        }
+
+        [Fact]
+        public void ObjectSkipsNullPropertiesWhenIncludeNullsFalse()
+        {
+            // includeNulls=false → {"Age":30} = 10
+            var obj = new Person { Name = null, Age = 30 };
+            Assert.Equal(10, JsonEstimator.Estimate(obj, false));
+        }
+
+        [Fact]
+        public void ObjectIncludesNullsWhenRequested()
+        {
+            // {"Name":null,"Age":30} = 22
+            var obj = new Person { Name = null, Age = 30 };
+            Assert.Equal(22, JsonEstimator.Estimate(obj, true));
+        }
+
+        private class Person
+        {
+            public string Name { get; set; }
+            public int Age { get; set; }
+        }
+    }
+}
