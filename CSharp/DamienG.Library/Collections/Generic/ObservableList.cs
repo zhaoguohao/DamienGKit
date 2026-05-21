@@ -11,7 +11,6 @@ namespace DamienG.Collections.Generic
 {
     public class ObservableList<T> : IList<T>
     {
-        private readonly object _lock = new object();
         private readonly IList<T> _internalList;
 
         public ObservableList()
@@ -55,7 +54,7 @@ namespace DamienG.Collections.Generic
             get => _internalList[index];
             set
             {
-                if (_internalList[index].Equals(value)) return;
+                if (EqualityComparer<T>.Default.Equals(_internalList[index], value)) return;
 
                 _internalList[index] = value;
                 OnListChanged(new ListChangedEventArgs(index, value));
@@ -65,7 +64,7 @@ namespace DamienG.Collections.Generic
         public void Add(T item)
         {
             _internalList.Add(item);
-            OnListChanged(new ListChangedEventArgs(_internalList.IndexOf(item), item));
+            OnListChanged(new ListChangedEventArgs(_internalList.Count - 1, item));
         }
 
         public void Clear()
@@ -90,16 +89,12 @@ namespace DamienG.Collections.Generic
 
         public bool Remove(T item)
         {
-            lock (_lock)
-            {
-                var index = _internalList.IndexOf(item);
-                if (_internalList.Remove(item))
-                {
-                    OnListChanged(new ListChangedEventArgs(index, item));
-                    return true;
-                }
-            }
-            return false;
+            var index = _internalList.IndexOf(item);
+            if (!_internalList.Remove(item))
+                return false;
+
+            OnListChanged(new ListChangedEventArgs(index, item));
+            return true;
         }
 
         public IEnumerator<T> GetEnumerator()
