@@ -1,13 +1,17 @@
 // Copyright (c) Damien Guard.  All rights reserved.
-// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 
 using System;
 
 namespace DamienG.System.Binary
 {
+    /// <summary>
+    /// A <see cref="BinaryTextEncoding"/> that represents bytes as uppercase hexadecimal pairs.
+    /// </summary>
     public class HexEncoding : BinaryTextEncoding
     {
+        /// <inheritdoc/>
         public override string Encode(byte[] bytes)
         {
             var output = new char[bytes.Length * 2];
@@ -21,6 +25,8 @@ namespace DamienG.System.Binary
             return new string(output);
         }
 
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="input"/> has an odd length or contains a non-hexadecimal character.</exception>
         public override byte[] Decode(string input)
         {
             if (input.Length % 2 == 1)

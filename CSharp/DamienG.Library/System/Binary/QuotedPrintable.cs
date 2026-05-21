@@ -1,5 +1,5 @@
 // Copyright (c) Damien Guard.  All rights reserved.
-// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 
 using System;
@@ -8,29 +8,45 @@ using System.Text;
 
 namespace DamienG.System.Binary
 {
+    /// <summary>
+    /// Flags controlling which whitespace characters should not be encoded by <see cref="QuotedPrintable"/>.
+    /// </summary>
     [Flags]
     public enum DoNotEncode
     {
+        /// <summary>Leave tab characters (<c>0x09</c>) as-is rather than encoding them.</summary>
         Tab = 0x01,
+        /// <summary>Leave space characters (<c>0x20</c>) as-is rather than encoding them.</summary>
         Space = 0x02
     }
 
+    /// <summary>
+    /// A <see cref="BinaryTextEncoding"/> implementing the Quoted-Printable encoding used in MIME (RFC 2045).
+    /// </summary>
     public class QuotedPrintable : BinaryTextEncoding
     {
         private readonly bool _encodeSpaces = true;
         private readonly bool _encodeTabs = true;
         private const int MaxLineLength = 76;
 
+        /// <summary>
+        /// Create a new <see cref="QuotedPrintable"/> encoder that encodes both spaces and tabs.
+        /// </summary>
         public QuotedPrintable()
         {
         }
 
+        /// <summary>
+        /// Create a new <see cref="QuotedPrintable"/> encoder leaving the specified whitespace characters unencoded.
+        /// </summary>
+        /// <param name="doNotEncode">Whitespace characters to leave unencoded.</param>
         public QuotedPrintable(DoNotEncode doNotEncode)
         {
             _encodeTabs = !doNotEncode.HasFlag(DoNotEncode.Tab);
             _encodeSpaces = !doNotEncode.HasFlag(DoNotEncode.Space);
         }
 
+        /// <inheritdoc/>
         public override string Encode(byte[] bytes)
         {
             var sb = new StringBuilder();
@@ -62,6 +78,8 @@ namespace DamienG.System.Binary
             }
         }
 
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="input"/> ends with a truncated <c>=</c> escape or contains an invalid hex digit.</exception>
         public override byte[] Decode(string input)
         {
             var output = new List<byte>();

@@ -1,5 +1,5 @@
 // Copyright (c) Damien Guard.  All rights reserved.
-// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 // Originally published at http://damieng.com/blog/2010/10/17/enums-better-syntax-improved-performance-and-tryparse-in-net-3-5
 
@@ -21,22 +21,30 @@ namespace DamienG.System
         private static readonly Dictionary<int, T> values = all.ToDictionary(k => Convert.ToInt32(k));
         private static readonly Dictionary<T, string> names = all.ToDictionary(k => k, v => v.ToString());
 
+        /// <summary>Returns true when <paramref name="value"/> is a defined value of the enum.</summary>
         public static bool IsDefined(T value) => names.Keys.Contains(value);
 
+        /// <summary>Returns true when <paramref name="value"/> is the case-sensitive name of a defined enum value.</summary>
         public static bool IsDefined(string value) => sensitiveNames.Keys.Contains(value);
 
+        /// <summary>Returns true when <paramref name="value"/> is the underlying integer of a defined enum value.</summary>
         public static bool IsDefined(int value) => values.Keys.Contains(value);
 
+        /// <summary>Returns all defined values of the enum.</summary>
         public static IEnumerable<T> GetValues() => all;
 
+        /// <summary>Returns the names of all defined values of the enum.</summary>
         public static string[] GetNames() => names.Values.ToArray();
 
+        /// <summary>Returns the name of the supplied <paramref name="value"/>, or <c>null</c> if it is not a defined enum value.</summary>
         public static string GetName(T value)
         {
             names.TryGetValue(value, out var name);
             return name;
         }
 
+        /// <summary>Parses <paramref name="value"/> as the case-sensitive name of an enum value.</summary>
+        /// <exception cref="ArgumentException">If <paramref name="value"/> is not a defined name.</exception>
         public static T Parse(string value)
         {
             if (!sensitiveNames.TryGetValue(value, out var parsed))
@@ -44,6 +52,10 @@ namespace DamienG.System
             return parsed;
         }
 
+        /// <summary>Parses <paramref name="value"/> as an enum name, optionally ignoring case.</summary>
+        /// <param name="value">The name to parse.</param>
+        /// <param name="ignoreCase">Whether to match names case-insensitively.</param>
+        /// <exception cref="ArgumentException">If <paramref name="value"/> is not a defined name.</exception>
         public static T Parse(string value, bool ignoreCase)
         {
             if (!ignoreCase)
@@ -54,8 +66,10 @@ namespace DamienG.System
             return parsed;
         }
 
+        /// <summary>Attempts to parse <paramref name="value"/> as the case-sensitive name of an enum value.</summary>
         public static bool TryParse(string value, out T returnValue) => sensitiveNames.TryGetValue(value, out returnValue);
 
+        /// <summary>Attempts to parse <paramref name="value"/> as an enum name, optionally ignoring case.</summary>
         public static bool TryParse(string value, bool ignoreCase, out T returnValue)
         {
             return ignoreCase
@@ -63,6 +77,7 @@ namespace DamienG.System
                        : TryParse(value, out returnValue);
         }
 
+        /// <summary>Parses <paramref name="value"/> as a case-sensitive enum name, returning <c>null</c> if empty or not found.</summary>
         public static T? ParseOrNull(string value)
         {
             if (string.IsNullOrEmpty(value))
@@ -74,6 +89,7 @@ namespace DamienG.System
             return null;
         }
 
+        /// <summary>Parses <paramref name="value"/> as an enum name (optionally ignoring case), returning <c>null</c> if empty or not found.</summary>
         public static T? ParseOrNull(string value, bool ignoreCase)
         {
             if (!ignoreCase)
@@ -88,6 +104,7 @@ namespace DamienG.System
             return null;
         }
 
+        /// <summary>Returns the enum value with the supplied underlying integer, or <c>null</c> if no such value is defined.</summary>
         public static T? CastOrNull(int value)
         {
             if (values.TryGetValue(value, out var foundValue))
@@ -96,12 +113,14 @@ namespace DamienG.System
             return null;
         }
 
+        /// <summary>Returns the individual flag values present in the supplied <paramref name="flagEnum"/>.</summary>
         public static IEnumerable<T> GetFlags(T flagEnum)
         {
             var flagInt = Convert.ToInt32(flagEnum);
             return all.Where(e => (Convert.ToInt32(e) & flagInt) != 0);
         }
 
+        /// <summary>Combines the supplied <paramref name="flags"/> into a single enum value via bitwise OR.</summary>
         public static T SetFlags(IEnumerable<T> flags)
         {
             var combined = flags.Aggregate(0, (current, flag) => current | Convert.ToInt32(flag));

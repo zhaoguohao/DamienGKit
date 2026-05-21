@@ -19,7 +19,10 @@ namespace DamienG.Security.Cryptography
     /// </remarks>
     public sealed class Crc32 : HashAlgorithm
     {
+        /// <summary>The default CRC32 polynomial (reversed representation of <c>0x04C11DB7</c>), compatible with Zip and similar formats.</summary>
         public const UInt32 DefaultPolynomial = 0xedb88320u;
+
+        /// <summary>The default initial seed value (all bits set).</summary>
         public const UInt32 DefaultSeed = 0xffffffffu;
 
         private static UInt32[] _defaultTable;

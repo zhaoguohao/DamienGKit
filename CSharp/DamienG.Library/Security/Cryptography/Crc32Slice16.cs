@@ -1,5 +1,5 @@
 // Copyright (c) Damien Guard.  All rights reserved.
-// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 
 using System;
@@ -8,9 +8,9 @@ using System.Security.Cryptography;
 namespace DamienG.Security.Cryptography
 {
     /// <summary>
-    /// Implements a 32-bit CRC hash algorithm compatible with Zip etc. 
-    /// This version uses the Slice-by-16 technique described at 
-    /// http://create.stephan-brumme.com/crc32/#slicing-by-16-overview and while C#/.NET doesn't 
+    /// Implements a 32-bit CRC hash algorithm compatible with Zip etc.
+    /// This version uses the Slice-by-16 technique described at
+    /// http://create.stephan-brumme.com/crc32/#slicing-by-16-overview and while C#/.NET doesn't
     /// inline all of the performance benefits it does seem to perform slighly better.
     /// It processes 16 bytes at a time using 16 lookup tables so the table size is increased
     /// from 1KB to 16KB.  Data is read using two UInt32 conversions.  UInt64 did not seem to
@@ -25,7 +25,10 @@ namespace DamienG.Security.Cryptography
     /// </remarks>
     public sealed class Crc32Slice16 : HashAlgorithm
     {
+        /// <summary>The default CRC32 polynomial (reversed representation of <c>0x04C11DB7</c>), compatible with Zip and similar formats.</summary>
         public const UInt32 DefaultPolynomial = 0xedb88320u;
+
+        /// <summary>The default initial seed value (all bits set).</summary>
         public const UInt32 DefaultSeed = 0xffffffffu;
 
         private static UInt32[,] _defaultTable;
@@ -34,11 +37,15 @@ namespace DamienG.Security.Cryptography
         private readonly UInt32[,] _table;
         private UInt32 _hash;
 
+        /// <summary>Create a new <see cref="Crc32Slice16"/> using <see cref="DefaultPolynomial"/> and <see cref="DefaultSeed"/>.</summary>
         public Crc32Slice16()
             : this(DefaultPolynomial, DefaultSeed)
         {
         }
 
+        /// <summary>Create a new <see cref="Crc32Slice16"/> using a supplied polynomial and seed.</summary>
+        /// <param name="polynomial">The polynomial to use in calculating.</param>
+        /// <param name="seed">The initial seed to start from.</param>
         public Crc32Slice16(UInt32 polynomial, UInt32 seed)
         {
             if (!BitConverter.IsLittleEndian)
@@ -48,16 +55,19 @@ namespace DamienG.Security.Cryptography
             _seed = _hash = seed;
         }
 
+        /// <inheritdoc/>
         public override void Initialize()
         {
             _hash = _seed;
         }
 
+        /// <inheritdoc/>
         protected override void HashCore(byte[] array, int ibStart, int cbSize)
         {
             _hash = CalculateHash(_table, _hash, array, ibStart, cbSize);
         }
 
+        /// <inheritdoc/>
         protected override byte[] HashFinal()
         {
             var hashBuffer = UInt32ToBigEndianBytes(~_hash);
@@ -65,18 +75,22 @@ namespace DamienG.Security.Cryptography
             return hashBuffer;
         }
 
+        /// <inheritdoc/>
         public override int HashSize => 32;
 
+        /// <summary>Calculate the CRC32 for <paramref name="buffer"/> using <see cref="DefaultPolynomial"/> and <see cref="DefaultSeed"/>.</summary>
         public static UInt32 Compute(byte[] buffer)
         {
             return Compute(DefaultSeed, buffer);
         }
 
+        /// <summary>Calculate the CRC32 for <paramref name="buffer"/> using <see cref="DefaultPolynomial"/> and the supplied seed.</summary>
         public static UInt32 Compute(UInt32 seed, byte[] buffer)
         {
             return Compute(DefaultPolynomial, seed, buffer);
         }
 
+        /// <summary>Calculate the CRC32 for <paramref name="buffer"/> using the supplied polynomial and seed.</summary>
         public static UInt32 Compute(UInt32 polynomial, UInt32 seed, byte[] buffer)
         {
             return ~CalculateHash(InitializeTable(polynomial), seed, buffer, 0, buffer.Length);

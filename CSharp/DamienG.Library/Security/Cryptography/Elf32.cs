@@ -1,5 +1,5 @@
 // Copyright (c) Damien Guard.  All rights reserved.
-// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 // Originally published at http://damieng.com/blog/2007/11/24/calculating-elf-32-in-c-and-net
 
@@ -15,6 +15,7 @@ namespace DamienG.Security.Cryptography
     {
         private UInt32 _hash;
 
+        /// <summary>Create a new <see cref="Elf32"/> hasher.</summary>
         public Elf32()
         {
             if (!BitConverter.IsLittleEndian)
@@ -23,16 +24,19 @@ namespace DamienG.Security.Cryptography
             _hash = 0;
         }
 
+        /// <inheritdoc/>
         public override void Initialize()
         {
             _hash = 0;
         }
 
+        /// <inheritdoc/>
         protected override void HashCore(byte[] array, int ibStart, int cbSize)
         {
             _hash = CalculateHash(_hash, array, ibStart, cbSize);
         }
 
+        /// <inheritdoc/>
         protected override byte[] HashFinal()
         {
             var hashBuffer = UInt32ToBigEndianBytes(_hash);
@@ -40,13 +44,16 @@ namespace DamienG.Security.Cryptography
             return hashBuffer;
         }
 
+        /// <inheritdoc/>
         public override int HashSize => 32;
 
+        /// <summary>Calculate the ELF32 hash for <paramref name="buffer"/> starting with a zero seed.</summary>
         public static UInt32 Compute(byte[] buffer)
         {
             return CalculateHash(0, buffer, 0, buffer.Length);
         }
 
+        /// <summary>Calculate the ELF32 hash for <paramref name="buffer"/> starting with the supplied <paramref name="seed"/>.</summary>
         public static UInt32 Compute(UInt32 seed, byte[] buffer)
         {
             return CalculateHash(seed, buffer, 0, buffer.Length);
