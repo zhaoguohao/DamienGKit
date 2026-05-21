@@ -161,19 +161,7 @@ namespace DamienG.Security.Cryptography
                 hash = (hash >> 8) ^ table[buffer[i] ^ hash & 0xff];
             return hash;
         }
-
-        /// <summary>
-        /// Convert a <see cref="UInt32"/> to a <see>
-        ///     <cref>byte[]</cref>
-        /// </see>
-        /// taking care
-        /// to reverse the bytes on little endian processors.
-        /// </summary>
-        /// <param name="uint32">The <see cref="UInt32"/> to convert.</param>
-        /// <returns>The <see>
-        ///         <cref>byte[]</cref>
-        ///     </see>
-        ///     containing the converted bytes.</returns>
+        
         private static byte[] UInt32ToBigEndianBytes(UInt32 uint32)
         {
             var result = BitConverter.GetBytes(uint32);

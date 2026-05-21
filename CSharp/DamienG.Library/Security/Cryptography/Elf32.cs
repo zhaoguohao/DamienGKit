@@ -71,7 +71,7 @@ namespace DamienG.Security.Cryptography
             }
             return hash;
         }
-
+        
         private static byte[] UInt32ToBigEndianBytes(UInt32 uint32)
         {
             var result = BitConverter.GetBytes(uint32);

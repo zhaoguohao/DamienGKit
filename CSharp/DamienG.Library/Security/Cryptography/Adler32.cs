@@ -23,6 +23,8 @@ namespace DamienG.Security.Cryptography
         /// <summary>Create a new <see cref="Adler32"/> hasher.</summary>
         public Adler32()
         {
+            if (!BitConverter.IsLittleEndian)
+                throw new PlatformNotSupportedException("Not supported on Big Endian processors");
         }
 
         /// <inheritdoc/>
@@ -69,10 +71,10 @@ namespace DamienG.Security.Cryptography
             
             return (first, second);
         }
-
-        private static byte[] UInt32ToBigEndianBytes(UInt32 value)
+        
+        private static byte[] UInt32ToBigEndianBytes(UInt32 uint32)
         {
-            var result = BitConverter.GetBytes(value);
+            var result = BitConverter.GetBytes(uint32);
 
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(result);
