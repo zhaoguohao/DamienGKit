@@ -314,6 +314,52 @@ namespace DamienG.Tests.System.Text
             Assert.Equal(expected, JsonEstimator.Estimate(bytes, true));
         }
 
+        [Fact]
+        public void SelfReferencingObjectDoesNotStackOverflow()
+        {
+            var node = new Node { Name = "root" };
+            node.Self = node;
+            // {"Name":"root","Self":{},"Other":null} = 38 (cyclic re-entry on Self collapses to {}).
+            Assert.Equal(38, JsonEstimator.Estimate(node, true));
+        }
+
+        [Fact]
+        public void SelfReferencingListDoesNotStackOverflow()
+        {
+            var list = new List<object> { 1 };
+            list.Add(list);
+            // [1,[]] = 6
+            Assert.Equal(6, JsonEstimator.Estimate(list, true));
+        }
+
+        [Fact]
+        public void SelfReferencingDictionaryDoesNotStackOverflow()
+        {
+            var dict = new Dictionary<string, object> { ["a"] = 1 };
+            dict["self"] = dict;
+            // {"a":1,"self":{}} = 17
+            Assert.Equal(17, JsonEstimator.Estimate(dict, true));
+        }
+
+        [Fact]
+        public void MutualCycleDoesNotStackOverflow()
+        {
+            var a = new Node { Name = "a" };
+            var b = new Node { Name = "b" };
+            a.Other = b;
+            b.Other = a;
+            // a → {"Name":"a","Other":{"Name":"b","Other":{}}} — just ensure no overflow.
+            var size = JsonEstimator.Estimate(a, true);
+            Assert.True(size > 0);
+        }
+
+        private class Node
+        {
+            public string Name { get; set; }
+            public Node Self { get; set; }
+            public Node Other { get; set; }
+        }
+
         public enum Color
         {
             Red = 0,

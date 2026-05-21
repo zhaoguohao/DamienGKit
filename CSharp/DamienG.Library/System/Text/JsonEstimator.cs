@@ -9,6 +9,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace DamienG.System.Text
 {
@@ -135,14 +136,47 @@ namespace DamienG.System.Text
             return 2 + (ch < 0x800 ? 2 : 3);
         }
 
+        // Cycle guard. Reference-type containers (object graphs, dictionaries, arbitrary
+        // enumerables) can refer back to themselves. We track the references currently being
+        // estimated on the thread and short-circuit a re-entry as an empty container so we
+        // don't stack-overflow. JSON serializers can't actually emit a cycle either — they
+        // either throw or rewrite with $ref — so the exact returned size on cycle isn't
+        // meaningful; avoiding the crash is.
+        [ThreadStatic]
+        private static HashSet<object> visiting;
+
+        private sealed class ReferenceComparer : IEqualityComparer<object>
+        {
+            public static readonly ReferenceComparer Instance = new ReferenceComparer();
+            public new bool Equals(object x, object y) => ReferenceEquals(x, y);
+            public int GetHashCode(object obj) => RuntimeHelpers.GetHashCode(obj);
+        }
+
+        private static bool EnterCycleGuard(object obj)
+        {
+            if (visiting == null)
+                visiting = new HashSet<object>(ReferenceComparer.Instance);
+            return visiting.Add(obj);
+        }
+
+        private static void ExitCycleGuard(object obj) => visiting.Remove(obj);
+
         private static long EstimateEnumerable(IEnumerable enumerable, bool includeNulls)
         {
-            long size = 0;
+            if (!EnterCycleGuard(enumerable)) return 2;
+            try
+            {
+                long size = 0;
 
-            foreach (var item in enumerable)
-                size += Estimate(item, includeNulls) + 1; // ,
+                foreach (var item in enumerable)
+                    size += Estimate(item, includeNulls) + 1; // ,
 
-            return size > 0 ? size + 1 : 2;
+                return size > 0 ? size + 1 : 2;
+            }
+            finally
+            {
+                ExitCycleGuard(enumerable);
+            }
         }
 
         private static readonly BindingFlags publicInstance = BindingFlags.Instance | BindingFlags.Public;
@@ -188,46 +222,62 @@ namespace DamienG.System.Text
 
         private static long EstimateDictionary(IDictionary dictionary, bool includeNulls)
         {
-            long size = 2; // { }
-            var wasFirst = true;
-
-            foreach (var key in dictionary.Keys)
+            if (!EnterCycleGuard(dictionary)) return 2;
+            try
             {
-                var value = dictionary[key];
-                if (includeNulls || value != null)
+                long size = 2; // { }
+                var wasFirst = true;
+
+                foreach (var key in dictionary.Keys)
                 {
-                    if (!wasFirst)
-                        size++;
-                    else
-                        wasFirst = false;
+                    var value = dictionary[key];
+                    if (includeNulls || value != null)
+                    {
+                        if (!wasFirst)
+                            size++;
+                        else
+                            wasFirst = false;
 
-                    size += Estimate(key, includeNulls) + 1 + Estimate(value, includeNulls); // :,
+                        size += Estimate(key, includeNulls) + 1 + Estimate(value, includeNulls); // :,
+                    }
                 }
-            }
 
-            return size;
+                return size;
+            }
+            finally
+            {
+                ExitCycleGuard(dictionary);
+            }
         }
 
         private static long EstimateObject(object obj, bool includeNulls)
         {
-            long size = 2;
-            var wasFirst = true;
-
-            foreach (var member in GetMembers(obj.GetType()))
+            if (!EnterCycleGuard(obj)) return 2;
+            try
             {
-                var value = member.Getter(obj);
-                if (includeNulls || value != null)
+                long size = 2;
+                var wasFirst = true;
+
+                foreach (var member in GetMembers(obj.GetType()))
                 {
-                    if (!wasFirst)
-                        size++;
-                    else
-                        wasFirst = false;
+                    var value = member.Getter(obj);
+                    if (includeNulls || value != null)
+                    {
+                        if (!wasFirst)
+                            size++;
+                        else
+                            wasFirst = false;
 
-                    size += member.Name.Length + 3 + Estimate(value, includeNulls);
+                        size += member.Name.Length + 3 + Estimate(value, includeNulls);
+                    }
                 }
-            }
 
-            return size;
+                return size;
+            }
+            finally
+            {
+                ExitCycleGuard(obj);
+            }
         }
     }
 }
