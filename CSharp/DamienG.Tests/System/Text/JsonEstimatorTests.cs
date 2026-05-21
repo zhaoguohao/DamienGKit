@@ -25,22 +25,56 @@ namespace DamienG.Tests.System.Text
             Assert.Equal(5, JsonEstimator.Estimate(false, true));
         }
 
-        [Fact]
-        public void ByteEstimatesAsOne()
+        [Theory]
+        [InlineData((byte)0, 1)]
+        [InlineData((byte)9, 1)]
+        [InlineData((byte)10, 2)]
+        [InlineData((byte)200, 3)]
+        [InlineData((byte)255, 3)]
+        public void ByteEstimateMatchesDigitCount(byte value, int expected)
         {
-            Assert.Equal(1, JsonEstimator.Estimate((byte)200, true));
+            Assert.Equal(expected, JsonEstimator.Estimate(value, true));
+        }
+
+        [Theory]
+        [InlineData((sbyte)0, 1)]
+        [InlineData((sbyte)-1, 2)]
+        [InlineData((sbyte)-10, 3)]
+        [InlineData((sbyte)127, 3)]
+        [InlineData((sbyte)-128, 4)]
+        public void SByteEstimateMatchesDigitCount(sbyte value, int expected)
+        {
+            Assert.Equal(expected, JsonEstimator.Estimate(value, true));
         }
 
         [Fact]
-        public void SByteEstimatesAsOne()
+        public void CharAsciiEstimatesAsThree()
         {
-            Assert.Equal(1, JsonEstimator.Estimate((sbyte)-10, true));
-        }
-
-        [Fact]
-        public void CharEstimatesAsThree()
-        {
+            // "x" = 3
             Assert.Equal(3, JsonEstimator.Estimate('x', true));
+        }
+
+        [Fact]
+        public void CharRequiringEscapeEstimatesAsFour()
+        {
+            // "\n" = 4, "\"" = 4, "\\" = 4
+            Assert.Equal(4, JsonEstimator.Estimate('\n', true));
+            Assert.Equal(4, JsonEstimator.Estimate('"', true));
+            Assert.Equal(4, JsonEstimator.Estimate('\\', true));
+        }
+
+        [Fact]
+        public void CharControlEstimatesAsEight()
+        {
+            // "" = 8 (two quotes + six-byte escape)
+            Assert.Equal(8, JsonEstimator.Estimate('', true));
+        }
+
+        [Fact]
+        public void CharNonAsciiCountsUtf8Bytes()
+        {
+            Assert.Equal(4, JsonEstimator.Estimate('é', true));   // 2-byte UTF-8 + quotes
+            Assert.Equal(5, JsonEstimator.Estimate('漢', true));  // 3-byte UTF-8 + quotes
         }
 
         [Fact]
@@ -108,6 +142,27 @@ namespace DamienG.Tests.System.Text
         {
             Assert.Equal(7, JsonEstimator.Estimate("hello", true));
             Assert.Equal(2, JsonEstimator.Estimate("", true));
+        }
+
+        [Theory]
+        [InlineData("a\"b", 6)]      // "a\"b"     = 6
+        [InlineData("a\\b", 6)]      // "a\\b"     = 6
+        [InlineData("a\nb", 6)]      // "a\nb"     = 6
+        [InlineData("a\tb", 6)]      // "a\tb"     = 6
+        [InlineData("ab", 10)] // "ab" = 10
+        public void StringEstimateAccountsForEscapes(string value, int expected)
+        {
+            Assert.Equal(expected, JsonEstimator.Estimate(value, true));
+        }
+
+        [Theory]
+        [InlineData("é", 4)]      // "é"  → 1×2 UTF-8 + 2
+        [InlineData("漢", 5)]     // "漢" → 1×3 UTF-8 + 2
+        [InlineData("😀", 6)]     // "😀" → surrogate pair → 4 UTF-8 + 2
+        [InlineData("aé漢", 8)]   // 1 + 2 + 3 + 2
+        public void StringEstimateCountsUtf8Bytes(string value, int expected)
+        {
+            Assert.Equal(expected, JsonEstimator.Estimate(value, true));
         }
 
         [Theory]

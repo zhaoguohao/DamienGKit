@@ -32,11 +32,12 @@ namespace DamienG.System.Text
             {
                 case null:
                     return 4;
-                case Byte _:
-                case SByte _:
-                    return 1;
-                case Char _:
-                    return 3;
+                case Byte b8:
+                    return b8.ToString(CultureInfo.InvariantCulture).Length;
+                case SByte sb8:
+                    return sb8.ToString(CultureInfo.InvariantCulture).Length;
+                case Char c:
+                    return EstimateChar(c);
                 case Boolean b:
                     return b ? 4 : 5;
                 case Guid _:
@@ -57,7 +58,7 @@ namespace DamienG.System.Text
                 case UInt64 u64:
                     return u64.ToString(CultureInfo.InvariantCulture).Length;
                 case String s:
-                    return s.Length + 2;
+                    return EstimateString(s);
                 case Decimal dec:
                     return dec.ToString(CultureInfo.InvariantCulture).Length;
                 case Double dou:
@@ -69,6 +70,59 @@ namespace DamienG.System.Text
             }
             
             return EstimateObject(obj, includeNulls);
+        }
+
+        // JSON strings are UTF-8 with a small set of mandatory escapes. We approximate the
+        // serialized byte length by walking the UTF-16 input once: count escape expansions
+        // for control chars / quote / backslash, and convert remaining code points to their
+        // UTF-8 byte count. Non-ASCII is left as raw UTF-8 (matches JSON.NET defaults and
+        // System.Text.Json with UnsafeRelaxedJsonEscaping); strict \uXXXX escaping of all
+        // non-ASCII is not modelled.
+        private static long EstimateString(string s)
+        {
+            long size = 2; // surrounding quotes
+
+            for (var i = 0; i < s.Length; i++)
+            {
+                var ch = s[i];
+                if (ch < 0x20)
+                {
+                    // \b \f \n \r \t collapse to 2 bytes; other controls become \u00XX (6 bytes).
+                    size += ch == '\b' || ch == '\f' || ch == '\n' || ch == '\r' || ch == '\t' ? 2 : 6;
+                }
+                else if (ch == '"' || ch == '\\')
+                {
+                    size += 2;
+                }
+                else if (ch < 0x80)
+                {
+                    size += 1;
+                }
+                else if (char.IsHighSurrogate(ch) && i + 1 < s.Length && char.IsLowSurrogate(s[i + 1]))
+                {
+                    size += 4; // surrogate pair → 4 UTF-8 bytes
+                    i++;
+                }
+                else
+                {
+                    size += ch < 0x800 ? 2 : 3;
+                }
+            }
+
+            return size;
+        }
+
+        private static long EstimateChar(char ch)
+        {
+            if (ch < 0x20)
+                return 2 + (ch == '\b' || ch == '\f' || ch == '\n' || ch == '\r' || ch == '\t' ? 2 : 6);
+            if (ch == '"' || ch == '\\')
+                return 4;
+            if (ch < 0x80)
+                return 3;
+            if (char.IsSurrogate(ch))
+                return 2 + 3; // lone surrogate — serializers typically emit U+FFFD (3 UTF-8 bytes)
+            return 2 + (ch < 0x800 ? 2 : 3);
         }
 
         private static long EstimateEnumerable(IEnumerable enumerable, bool includeNulls)
