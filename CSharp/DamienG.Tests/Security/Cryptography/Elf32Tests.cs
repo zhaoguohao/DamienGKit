@@ -37,5 +37,14 @@ namespace DamienG.Tests.Security.Cryptography
 
             Assert.Equal(0x5838755u, GetBigEndianUInt32(hash));
         }
+
+        [Fact]
+        public void HighBitInputExercisesMasking()
+        {
+            // Use 8 bytes of 0xFF to reach the high bits
+            var actual = Elf32.Compute(new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
+            
+            Assert.Equal(0x000010EFU, actual);
+        }
     }
 }

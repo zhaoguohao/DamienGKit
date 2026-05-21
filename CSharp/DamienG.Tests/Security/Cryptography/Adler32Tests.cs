@@ -179,5 +179,23 @@ namespace DamienG.Tests.Security.Cryptography
             Assert.Equal(0xE446U, aOnly);
             Assert.Equal(actual, Adler32.Compute(bytes));
         }
+
+        [Fact]
+        public void LargeBufferExceeding60000Boundary()
+        {
+            // Adler32 for 500 copies of 'a' (0x61 = 97)
+            // A = (1 + 500 * 97) % 65521 = 48501 % 65521 = 48501
+            // B = sum_{i=1 to 500} (1 + i * 97) % 65521
+            // B = (500 + 97 * 500 * 501 / 2) % 65521
+            // B = (500 + 97 * 250 * 501) % 65521
+            // B = (500 + 12149250) % 65521
+            // 12149750 / 65521 = 185.43...
+            // 185 * 65521 = 12121385
+            // 12149750 - 12121385 = 28365
+            // Expected hash = (28365 << 16) | 48501 = 0x6ECDBD75
+            var bytes = Enumerable.Repeat((byte)'a', 500).ToArray();
+            var actual = Adler32.Compute(bytes);
+            Assert.Equal(0x6ECDBD75U, actual);
+        }
     }
 }

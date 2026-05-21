@@ -38,5 +38,15 @@ namespace DamienG.Tests.Security.Cryptography
 
             Assert.Equal(0xcccd937b6f682d4fUL, GetBigEndianUInt64(hash));
         }
+
+        [Fact]
+        public void KnownPolynomialAndSeed()
+        {
+            // CRC64-ISO with DefaultPolynomial (0xD800000000000000) and DefaultSeed (0)
+            var bytes = "123456789"u8.ToArray();
+            var actual = Crc64Iso.Compute(bytes);
+            
+            Assert.Equal(5090661014116757502UL, actual);
+        }
     }
 }

@@ -37,5 +37,17 @@ namespace DamienG.Tests.Security.Cryptography
 
             Assert.Equal(0xaffeed9fUL, GetBigEndianUInt32(hash));
         }
+
+        [Fact]
+        public void MatchesStandardCrc32OnLargeBuffer()
+        {
+            var bytes = new byte[1000];
+            new Random(42).NextBytes(bytes);
+            
+            var expected = Crc32.Compute(bytes);
+            var actual = Crc32Slice16.Compute(bytes);
+            
+            Assert.Equal(expected, actual);
+        }
     }
 }

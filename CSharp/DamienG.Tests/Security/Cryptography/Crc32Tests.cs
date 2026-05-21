@@ -37,5 +37,16 @@ namespace DamienG.Tests.Security.Cryptography
 
             Assert.Equal(0xaffeed9fUL, GetBigEndianUInt32(hash));
         }
+
+        [Fact]
+        public void KnownPolynomialAndSeed()
+        {
+            // CRC32 with DefaultPolynomial (0xEDB88320) and DefaultSeed (0xFFFFFFFF)
+            // Input "123456789" is a standard check value
+            var bytes = "123456789"u8.ToArray();
+            var actual = Crc32.Compute(bytes);
+            
+            Assert.Equal(0xCBF43926U, actual);
+        }
     }
 }
